@@ -1,0 +1,73 @@
+:host {
+	display: block;
+}
+
+.shell {
+	min-height: 100vh;
+	padding: 48px 24px;
+	background:
+		radial-gradient(circle at top left, rgba(94, 114, 228, 0.16), transparent 30%),
+		radial-gradient(circle at top right, rgba(255, 122, 89, 0.14), transparent 28%),
+		linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+	color: #0f172a;
+}
+
+.hero {
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 32px;
+	border: 1px solid rgba(15, 23, 42, 0.08);
+	border-radius: 28px;
+	background: rgba(255, 255, 255, 0.78);
+	backdrop-filter: blur(14px);
+	box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+}
+
+.eyebrow {
+	margin: 0 0 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.2em;
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: #475569;
+}
+
+h1 {
+	margin: 0;
+	font-size: clamp(2.5rem, 6vw, 4.75rem);
+	line-height: 1;
+	letter-spacing: -0.05em;
+}
+
+.lead {
+	max-width: 700px;
+	margin: 18px 0 0;
+	font-size: 1.05rem;
+	line-height: 1.7;
+	color: #334155;
+}
+
+.cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 18px;
+	margin-top: 28px;
+}
+
+article {
+	padding: 20px;
+	border-radius: 20px;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.94));
+	border: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+article h2 {
+	margin: 0 0 8px;
+	font-size: 1rem;
+}
+
+article p {
+	margin: 0;
+	color: #475569;
+	line-height: 1.6;
+}
