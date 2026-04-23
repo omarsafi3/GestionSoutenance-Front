@@ -23,7 +23,9 @@ export class FormComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   // Options pour les selects
-  niveaux = ['Licence 1', 'Licence 2', 'Licence 3', 'Master 1', 'Master 2'];
+  niveaux = ['Licence 1', 'Licence 2', 'Licence 3', 'Master 1', 'Master 2', '1ère année préparatoire',
+    '2ème année préparatoire', '1ère année cycle ingénieur','2ème année cycle ingénieur','3ème année cycle ingénieur',
+    '1ère année doctorat','2ème année doctorat','3ème année doctorat' ];
   filieres = ['Informatique', 'Génie Logiciel', 'Réseaux & Sécurité', 'IA & Data Science'];
 
   constructor(
