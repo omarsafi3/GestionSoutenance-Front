@@ -1,27 +1,64 @@
-<main class="shell">
-  <section class="hero">
-    <p class="eyebrow">Gestion de soutenance</p>
-    <h1>{{ title }}</h1>
-    <p class="lead">
-      Service-oriented front-end for planning defenses, assigning juries,
-      managing rooms and slots, entering marks, and publishing results.
-    </p>
-
-    <div class="cards">
-      <article>
-        <h2>Soutenances</h2>
-        <p>Creation, modification, consultation, and conflict-aware planning.</p>
-      </article>
-      <article>
-        <h2>Juries</h2>
-        <p>President, rapporteur, and examiner assignment workflows.</p>
-      </article>
-      <article>
-        <h2>Résultats</h2>
-        <p>Marks entry, automatic averages, final mention, and student access.</p>
-      </article>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand fw-bold" [routerLink]="['/etudiants']">
+      <i class="bi bi-mortarboard-fill"></i>
+      Gestion des Soutenances
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/etudiants']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi bi-house"></i> Accueil
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/etudiants']" routerLinkActive="active">
+            <i class="bi bi-people"></i> Étudiants
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-list-ul"></i> Modules
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Jurys</a></li>
+            <li><a class="dropdown-item" href="#">Soutenances</a></li>
+            <li><a class="dropdown-item" href="#">Notes</a></li>
+            <li><a class="dropdown-item" href="#">Salles</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Résultats</a></li>
+          </ul>
+        </li>
+      </ul>
     </div>
-  </section>
+  </div>
+</nav>
 
-  <router-outlet />
+<!-- Main Content -->
+<main class="main-content">
+  <router-outlet></router-outlet>
 </main>
+
+<!-- Footer -->
+<footer class="bg-light border-top mt-5 py-4">
+  <div class="container-fluid px-4">
+    <div class="row">
+      <div class="col-md-6">
+        <p class="mb-0">
+          <strong>&copy; 2026 Gestion des Soutenances</strong>
+        </p>
+        <small class="text-muted">Application de gestion des soutenances académiques</small>
+      </div>
+      <div class="col-md-6 text-end">
+        <small class="text-muted">
+          <i class="bi bi-info-circle"></i>
+          Version 1.0.0 | <a href="https://api.localhost:8081" target="_blank" class="text-decoration-none">API Backend</a>
+        </small>
+      </div>
+    </div>
+  </div>
+</footer>
