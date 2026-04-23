@@ -17,6 +17,15 @@ export class EtudiantService {
 
   constructor(private http: HttpClient) {}
 
+  private extractErrorMessage(err: any, fallback: string): string {
+    const backendMessage =
+      typeof err?.error === 'string'
+        ? err.error
+        : err?.error?.message || err?.message;
+
+    return backendMessage && backendMessage.trim() ? backendMessage : fallback;
+  }
+
   // Observables pour les abonnements
   getEtudiants(): Observable<Etudiant[]> {
     return this.etudiants$.asObservable();
@@ -41,7 +50,7 @@ export class EtudiantService {
         this.loading$.next(false);
       }),
       catchError(err => {
-        const errorMsg = 'Erreur lors du chargement des étudiants';
+        const errorMsg = this.extractErrorMessage(err, 'Erreur lors du chargement des étudiants');
         this.error$.next(errorMsg);
         this.loading$.next(false);
         return throwError(() => new Error(errorMsg));
@@ -56,7 +65,7 @@ export class EtudiantService {
     return this.http.get<Etudiant>(`${this.apiUrl}/${id}`).pipe(
       tap(() => this.loading$.next(false)),
       catchError(err => {
-        const errorMsg = 'Erreur lors du chargement de l\'étudiant';
+        const errorMsg = this.extractErrorMessage(err, 'Erreur lors du chargement de l\'étudiant');
         this.error$.next(errorMsg);
         this.loading$.next(false);
         return throwError(() => new Error(errorMsg));
@@ -66,7 +75,11 @@ export class EtudiantService {
 
   exists(id: number): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/exists/${id}`).pipe(
-      catchError(() => throwError(() => new Error('Erreur lors de la verification de l etudiant')))
+      catchError(err => {
+        const errorMsg = this.extractErrorMessage(err, 'Erreur lors de la verification de l etudiant');
+        this.error$.next(errorMsg);
+        return throwError(() => new Error(errorMsg));
+      })
     );
   }
 
@@ -81,7 +94,7 @@ export class EtudiantService {
         this.loading$.next(false);
       }),
       catchError(err => {
-        const errorMsg = 'Erreur lors de la création de l\'étudiant';
+        const errorMsg = this.extractErrorMessage(err, 'Erreur lors de la création de l\'étudiant');
         this.error$.next(errorMsg);
         this.loading$.next(false);
         return throwError(() => new Error(errorMsg));
@@ -104,7 +117,7 @@ export class EtudiantService {
         this.loading$.next(false);
       }),
       catchError(err => {
-        const errorMsg = 'Erreur lors de la modification de l\'étudiant';
+        const errorMsg = this.extractErrorMessage(err, 'Erreur lors de la modification de l\'étudiant');
         this.error$.next(errorMsg);
         this.loading$.next(false);
         return throwError(() => new Error(errorMsg));
@@ -123,7 +136,7 @@ export class EtudiantService {
         this.loading$.next(false);
       }),
       catchError(err => {
-        const errorMsg = 'Erreur lors de la suppression de l\'étudiant';
+        const errorMsg = this.extractErrorMessage(err, 'Erreur lors de la suppression de l\'étudiant');
         this.error$.next(errorMsg);
         this.loading$.next(false);
         return throwError(() => new Error(errorMsg));

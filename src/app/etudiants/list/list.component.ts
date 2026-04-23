@@ -186,11 +186,21 @@ export class ListComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
+            if (this.selectedIdToDelete !== null) {
+              this.allEtudiants = this.allEtudiants.filter(e => e.id !== this.selectedIdToDelete);
+              this.extractFilterOptions();
+              this.applyFilters();
+            }
             this.successMessage = 'Étudiant supprimé avec succès';
             this.showDeleteConfirm = false;
             this.selectedIdToDelete = null;
             setTimeout(() => this.successMessage = '', 3000);
-          }
+          },
+          error: (error) => {
+            this.errorMessage = error.message || 'Erreur lors de la suppression de l\'étudiant';
+            this.showDeleteConfirm = false;
+            this.selectedIdToDelete = null;
+          },
         });
     }
   }

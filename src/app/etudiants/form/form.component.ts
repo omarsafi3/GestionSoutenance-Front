@@ -47,6 +47,14 @@ export class FormComponent implements OnInit, OnDestroy {
     this.service.getLoading()
       .pipe(takeUntil(this.destroy$))
       .subscribe(loading => this.loading = loading);
+
+    this.service.getError()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(error => {
+        if (error) {
+          this.errorMessage = error;
+        }
+      });
   }
 
   initForm(): void {
@@ -66,7 +74,10 @@ export class FormComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (etudiant) => {
           this.form.patchValue(etudiant);
-        }
+        },
+        error: (error) => {
+          this.errorMessage = error.message || 'Erreur lors du chargement de l\'étudiant';
+        },
       });
   }
 
@@ -135,7 +146,10 @@ export class FormComponent implements OnInit, OnDestroy {
             setTimeout(() => {
               this.router.navigate(['/etudiants']);
             }, 2000);
-          }
+          },
+          error: (error) => {
+            this.errorMessage = error.message || 'Erreur lors de la modification de l\'étudiant';
+          },
         });
     } else {
       this.service.create(etudiant)
@@ -146,7 +160,10 @@ export class FormComponent implements OnInit, OnDestroy {
             setTimeout(() => {
               this.router.navigate(['/etudiants']);
             }, 2000);
-          }
+          },
+          error: (error) => {
+            this.errorMessage = error.message || 'Erreur lors de la création de l\'étudiant';
+          },
         });
     }
   }
