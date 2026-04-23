@@ -158,6 +158,12 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   // Actions CRUD
+  view(id: number | undefined): void {
+    if (id) {
+      this.router.navigate(['/etudiants', id]);
+    }
+  }
+
   edit(id: number | undefined): void {
     if (id) {
       this.router.navigate(['/etudiants/edit', id]);

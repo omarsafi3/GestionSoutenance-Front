@@ -110,6 +110,12 @@
             <td><span class="badge bg-warning text-dark">{{ etudiant.niveau }}</span></td>
             <td class="text-center">
               <button 
+                class="btn btn-sm btn-outline-info me-1"
+                (click)="view(etudiant.id)"
+                title="Voir les détails">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button 
                 class="btn btn-sm btn-primary me-1"
                 (click)="edit(etudiant.id)"
                 title="Modifier">
