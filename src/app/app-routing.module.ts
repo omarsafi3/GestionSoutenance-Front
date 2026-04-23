@@ -7,6 +7,8 @@ import { DetailComponent } from './etudiants/detail/detail.component';
 import { EncadrantsListComponent } from './encadrants/list/list.component';
 import { EncadrantsFormComponent } from './encadrants/form/form.component';
 import { EncadrantsDetailComponent } from './encadrants/detail/detail.component';
+import { JurysPageComponent } from './features/jurys/pages/jurys-page.component';
+import { NotesPageComponent } from './features/notes/pages/notes-page.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'etudiants', pathMatch: 'full' },
@@ -18,6 +20,8 @@ const routes: Routes = [
   { path: 'encadrants/add', component: EncadrantsFormComponent, data: { title: 'Ajouter un encadrant' } },
   { path: 'encadrants/edit/:id', component: EncadrantsFormComponent, data: { title: 'Modifier encadrant' } },
   { path: 'encadrants/:id', component: EncadrantsDetailComponent, data: { title: 'Detail encadrant' } },
+  { path: 'jurys', component: JurysPageComponent, data: { title: 'Gestion des jurys' } },
+  { path: 'notes', component: NotesPageComponent, data: { title: 'Gestion des notes' } },
   // Catch-all route
   { path: '**', redirectTo: 'etudiants' }
 ];

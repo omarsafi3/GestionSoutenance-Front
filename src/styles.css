@@ -324,6 +324,153 @@ a:hover {
   }
 }
 
+/* Feature pages: jurys / notes */
+.page-header {
+  margin: 0 auto 1.5rem;
+  max-width: 1200px;
+  padding: 0 1rem;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.page-header p {
+  margin: 0.35rem 0 0;
+  color: #6c757d;
+}
+
+.panel {
+  margin: 0 auto 2rem;
+  max-width: 1200px;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-weight: 500;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+  border: 1px solid #ced4da;
+  border-radius: 0.45rem;
+  padding: 0.55rem 0.75rem;
+}
+
+.form-grid textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.actions-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-light {
+  background: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 0.45rem;
+  padding: 0.5rem 0.9rem;
+}
+
+.btn-primary,
+.btn-danger {
+  border: none;
+  border-radius: 0.45rem;
+  padding: 0.5rem 0.9rem;
+}
+
+.inline-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.75rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.inline-tools label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 260px;
+}
+
+.inline-tools select {
+  border: 1px solid #ced4da;
+  border-radius: 0.45rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.result-card {
+  border: 1px solid #dbe6ff;
+  background: #f5f9ff;
+  border-radius: 0.5rem;
+  padding: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.result-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.result-card p {
+  margin: 0.2rem 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+}
+
+.data-table th,
+.data-table td {
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.6rem;
+  text-align: left;
+}
+
+.data-table thead th {
+  background: #f8f9fa;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.status {
+  margin: 0.6rem 0 0;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.45rem;
+}
+
+.status.ok {
+  color: #0f5132;
+  background: #d1e7dd;
+}
+
+.status.err {
+  color: #842029;
+  background: #f8d7da;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
