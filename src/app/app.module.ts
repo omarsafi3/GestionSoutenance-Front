@@ -10,13 +10,19 @@ import { AppRoutingModule } from './app-routing.module';
 import { ListComponent } from './etudiants/list/list.component';
 import { FormComponent } from './etudiants/form/form.component';
 import { DetailComponent } from './etudiants/detail/detail.component';
+import { EncadrantsListComponent } from './encadrants/list/list.component';
+import { EncadrantsFormComponent } from './encadrants/form/form.component';
+import { EncadrantsDetailComponent } from './encadrants/detail/detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListComponent,
     FormComponent,
-    DetailComponent
+    DetailComponent,
+    EncadrantsListComponent,
+    EncadrantsFormComponent,
+    EncadrantsDetailComponent
   ],
   imports: [
     BrowserModule,
