@@ -1,0 +1,186 @@
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <!-- Header -->
+      <div class="mb-4">
+        <h2 class="display-6">
+          <i class="bi bi-person-fill-add"></i>
+          {{ isEditMode ? 'Modifier Étudiant' : 'Ajouter un Étudiant' }}
+        </h2>
+        <p class="text-muted">
+          {{ isEditMode ? 'Mettez à jour les informations de l\'étudiant' : 'Remplissez tous les champs requis' }}
+        </p>
+      </div>
+
+      <!-- Messages globaux -->
+      <div class="alert alert-success alert-dismissible fade show" *ngIf="successMessage" role="alert">
+        <i class="bi bi-check-circle"></i> {{ successMessage }}
+      </div>
+
+      <div class="alert alert-danger alert-dismissible fade show" *ngIf="errorMessage" role="alert">
+        <i class="bi bi-exclamation-circle"></i> {{ errorMessage }}
+      </div>
+
+      <!-- Card du formulaire -->
+      <div class="card shadow-lg">
+        <div class="card-body p-4">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Nom -->
+            <div class="mb-3">
+              <label for="nom" class="form-label fw-bold">
+                Nom <span class="text-danger">*</span>
+              </label>
+              <input 
+                type="text" 
+                class="form-control"
+                id="nom"
+                formControlName="nom"
+                placeholder="Ex: DUPONT"
+                [class.is-invalid]="isFieldInvalid('nom')"
+                [disabled]="loading">
+              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('nom')">
+                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('nom') }}
+              </div>
+              <small class="form-text text-muted d-block mt-1">
+                Minimum 2 caractères
+              </small>
+            </div>
+
+            <!-- Prénom -->
+            <div class="mb-3">
+              <label for="prenom" class="form-label fw-bold">
+                Prénom <span class="text-danger">*</span>
+              </label>
+              <input 
+                type="text" 
+                class="form-control"
+                id="prenom"
+                formControlName="prenom"
+                placeholder="Ex: Jean"
+                [class.is-invalid]="isFieldInvalid('prenom')"
+                [disabled]="loading">
+              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('prenom')">
+                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('prenom') }}
+              </div>
+              <small class="form-text text-muted d-block mt-1">
+                Minimum 2 caractères
+              </small>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label fw-bold">
+                Email <span class="text-danger">*</span>
+              </label>
+              <input 
+                type="email" 
+                class="form-control"
+                id="email"
+                formControlName="email"
+                placeholder="Ex: jean.dupont@example.com"
+                [class.is-invalid]="isFieldInvalid('email')"
+                [disabled]="loading">
+              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('email')">
+                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('email') }}
+              </div>
+            </div>
+
+            <!-- Matricule -->
+            <div class="mb-3">
+              <label for="matricule" class="form-label fw-bold">
+                Matricule <span class="text-danger">*</span>
+              </label>
+              <input 
+                type="text" 
+                class="form-control"
+                id="matricule"
+                formControlName="matricule"
+                placeholder="Ex: MAT123456"
+                [class.is-invalid]="isFieldInvalid('matricule')"
+                [disabled]="loading">
+              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('matricule')">
+                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('matricule') }}
+              </div>
+              <small class="form-text text-muted d-block mt-1">
+                Lettres et chiffres uniquement (ex: MAT123456)
+              </small>
+            </div>
+
+            <!-- Filière -->
+            <div class="mb-3">
+              <label for="filiere" class="form-label fw-bold">
+                Filière <span class="text-danger">*</span>
+              </label>
+              <select 
+                class="form-select"
+                id="filiere"
+                formControlName="filiere"
+                [class.is-invalid]="isFieldInvalid('filiere')"
+                [disabled]="loading">
+                <option value="">-- Sélectionnez une filière --</option>
+                <option *ngFor="let filiere of filieres" [value]="filiere">
+                  {{ filiere }}
+                </option>
+              </select>
+              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('filiere')">
+                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('filiere') }}
+              </div>
+            </div>
+
+            <!-- Niveau -->
+            <div class="mb-4">
+              <label for="niveau" class="form-label fw-bold">
+                Niveau <span class="text-danger">*</span>
+              </label>
+              <select 
+                class="form-select"
+                id="niveau"
+                formControlName="niveau"
+                [class.is-invalid]="isFieldInvalid('niveau')"
+                [disabled]="loading">
+                <option value="">-- Sélectionnez un niveau --</option>
+                <option *ngFor="let niveau of niveaux" [value]="niveau">
+                  {{ niveau }}
+                </option>
+              </select>
+              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('niveau')">
+                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('niveau') }}
+              </div>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
+              <button 
+                type="reset"
+                class="btn btn-outline-secondary"
+                (click)="resetForm()"
+                [disabled]="loading">
+                <i class="bi bi-arrow-clockwise"></i> Réinitialiser
+              </button>
+              <button 
+                type="button"
+                class="btn btn-secondary"
+                (click)="cancel()"
+                [disabled]="loading">
+                <i class="bi bi-x-lg"></i> Annuler
+              </button>
+              <button 
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="form.invalid || loading">
+                <span class="spinner-border spinner-border-sm me-2" *ngIf="loading" role="status" aria-hidden="true"></span>
+                <i class="bi bi-check-circle" *ngIf="!loading"></i>
+                {{ isEditMode ? 'Mettre à jour' : 'Créer' }}
+              </button>
+            </div>
+
+            <!-- Note sur les champs obligatoires -->
+            <small class="form-text text-muted d-block mt-3">
+              <i class="bi bi-info-circle"></i> Les champs marqués d'un <span class="text-danger">*</span> sont obligatoires
+            </small>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

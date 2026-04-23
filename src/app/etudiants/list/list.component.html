@@ -31,9 +31,10 @@
           <input 
             type="text" 
             class="form-control" 
+            #searchInput
             placeholder="Rechercher (nom, prénom, email, matricule...)"
             [(ngModel)]="searchTerm"
-            (input)="onSearch($event.target.value)"
+            (input)="onSearch(searchInput.value)"
             [disabled]="loading">
           <small class="form-text text-muted d-block mt-1">
             Affichage: {{ paginatedEtudiants.length }} résultats
