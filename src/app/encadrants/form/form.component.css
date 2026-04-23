@@ -1,0 +1,61 @@
+:host {
+  --primary-color: #0d6efd;
+  --danger-color: #dc3545;
+}
+
+.container.form-page {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: calc(100vh - 220px);
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-radius: 16px;
+}
+
+h2 {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.form-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.header-chip {
+  align-self: flex-start;
+  background: #eaf2ff;
+  color: #214d88;
+  border: 1px solid #cfe1ff;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+}
+
+.form-card {
+  border: 1px solid #e3ebfa;
+  border-radius: 0.75rem;
+}
+
+.form-control,
+.form-select {
+  border: 1px solid #dbe5f5;
+  border-radius: 0.5rem;
+  padding: 0.72rem 0.9rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.18);
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: var(--danger-color);
+}
+
+.invalid-feedback {
+  color: var(--danger-color);
+}
