@@ -2,11 +2,44 @@
   display: block;
 }
 
-.card {
-  border: none;
-  border-radius: 0.5rem;
+.detail-page {
+  background: linear-gradient(170deg, #f8fbff 0%, #f2f7ff 100%);
+  border-radius: 16px;
 }
 
 .fw-semibold {
   font-weight: 600;
+}
+
+.detail-header h2 {
+  color: #1b437a;
+  font-weight: 700;
+}
+
+.header-chip {
+  display: inline-block;
+  background: #e9f2ff;
+  border: 1px solid #cfe2ff;
+  color: #24528d;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.detail-card {
+  border: 1px solid #e1ebfb;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(24, 67, 122, 0.08);
+}
+
+.label {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.value {
+  margin-bottom: 0;
+  color: #173f74;
 }
