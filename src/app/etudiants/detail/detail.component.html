@@ -1,6 +1,9 @@
-<div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Details etudiant</h2>
+<div class="container py-4 detail-page">
+  <div class="d-flex justify-content-between align-items-center mb-4 detail-header">
+    <div>
+      <span class="header-chip">Fiche étudiant</span>
+      <h2 class="mb-0 mt-2">Détails étudiant</h2>
+    </div>
     <button class="btn btn-outline-secondary" (click)="goToList()">
       <i class="bi bi-arrow-left"></i> Retour a la liste
     </button>
@@ -17,32 +20,32 @@
     {{ errorMessage }}
   </div>
 
-  <div class="card shadow-sm" *ngIf="!loading && etudiant">
+  <div class="card shadow-sm detail-card" *ngIf="!loading && etudiant">
     <div class="card-body">
       <div class="row g-3">
         <div class="col-md-6">
-          <p class="mb-1 text-muted">Nom</p>
-          <p class="fw-semibold">{{ etudiant.nom }}</p>
+          <p class="mb-1 text-muted label">Nom</p>
+          <p class="fw-semibold value">{{ etudiant.nom }}</p>
         </div>
         <div class="col-md-6">
-          <p class="mb-1 text-muted">Prenom</p>
-          <p class="fw-semibold">{{ etudiant.prenom }}</p>
+          <p class="mb-1 text-muted label">Prénom</p>
+          <p class="fw-semibold value">{{ etudiant.prenom }}</p>
         </div>
         <div class="col-md-6">
-          <p class="mb-1 text-muted">Email</p>
-          <p class="fw-semibold">{{ etudiant.email }}</p>
+          <p class="mb-1 text-muted label">Email</p>
+          <p class="fw-semibold value">{{ etudiant.email }}</p>
         </div>
         <div class="col-md-6">
-          <p class="mb-1 text-muted">Matricule</p>
-          <p class="fw-semibold">{{ etudiant.matricule }}</p>
+          <p class="mb-1 text-muted label">Matricule</p>
+          <p class="fw-semibold value">{{ etudiant.matricule }}</p>
         </div>
         <div class="col-md-6">
-          <p class="mb-1 text-muted">Filiere</p>
-          <p class="fw-semibold">{{ etudiant.filiere }}</p>
+          <p class="mb-1 text-muted label">Filière</p>
+          <p class="fw-semibold value">{{ etudiant.filiere }}</p>
         </div>
         <div class="col-md-6">
-          <p class="mb-1 text-muted">Niveau</p>
-          <p class="fw-semibold">{{ etudiant.niveau }}</p>
+          <p class="mb-1 text-muted label">Niveau</p>
+          <p class="fw-semibold value">{{ etudiant.niveau }}</p>
         </div>
       </div>
     </div>
