@@ -64,6 +64,12 @@ export class EtudiantService {
     );
   }
 
+  exists(id: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/exists/${id}`).pipe(
+      catchError(() => throwError(() => new Error('Erreur lors de la verification de l etudiant')))
+    );
+  }
+
   create(etudiant: Etudiant): Observable<Etudiant> {
     this.loading$.next(true);
     this.error$.next(null);

@@ -33,15 +33,29 @@ export class DetailComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.service.getById(id)
+    this.service.exists(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (etudiant) => {
-          this.etudiant = etudiant;
-          this.errorMessage = '';
+        next: (exists) => {
+          if (!exists) {
+            this.errorMessage = 'Etudiant introuvable.';
+            return;
+          }
+
+          this.service.getById(id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+              next: (etudiant) => {
+                this.etudiant = etudiant;
+                this.errorMessage = '';
+              },
+              error: () => {
+                this.errorMessage = 'Impossible de charger les details de l etudiant.';
+              }
+            });
         },
         error: () => {
-          this.errorMessage = 'Impossible de charger les details de l etudiant.';
+          this.errorMessage = 'Impossible de verifier cet etudiant.';
         }
       });
   }
