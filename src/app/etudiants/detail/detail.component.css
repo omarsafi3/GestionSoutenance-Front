@@ -1,0 +1,12 @@
+:host {
+  display: block;
+}
+
+.card {
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.fw-semibold {
+  font-weight: 600;
+}
