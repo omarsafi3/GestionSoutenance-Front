@@ -1,8 +1,11 @@
-<div class="container mt-5 mb-5">
+<div class="container form-page mt-5 mb-5">
   <div class="row justify-content-center">
     <div class="col-md-7">
       <!-- Header -->
-      <div class="mb-4">
+      <div class="mb-4 form-header">
+        <span class="header-chip">
+          <i class="bi bi-mortarboard"></i> Module Étudiants
+        </span>
         <h2 class="display-6">
           <i class="bi bi-person-fill-add"></i>
           {{ isEditMode ? 'Modifier Étudiant' : 'Ajouter un Étudiant' }}
@@ -22,7 +25,7 @@
       </div>
 
       <!-- Card du formulaire -->
-      <div class="card shadow-lg">
+      <div class="card shadow-lg form-card">
         <div class="card-body p-4">
           <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <!-- Nom -->

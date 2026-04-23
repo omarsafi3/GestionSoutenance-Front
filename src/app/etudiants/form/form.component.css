@@ -8,11 +8,12 @@
 }
 
 /* Container principal */
-.container {
+.container.form-page {
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  min-height: 100vh;
+  min-height: calc(100vh - 220px);
   padding-top: 2rem;
   padding-bottom: 2rem;
+  border-radius: 16px;
 }
 
 /* Header */
@@ -26,6 +27,23 @@ h2 {
 .text-muted {
   font-size: 1rem;
   opacity: 0.8;
+}
+
+.form-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.header-chip {
+  align-self: flex-start;
+  background: #eaf2ff;
+  color: #214d88;
+  border: 1px solid #cfe1ff;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
 }
 
 /* Carte principale */
@@ -43,6 +61,10 @@ h2 {
 
 .card-body {
   background-color: white;
+}
+
+.form-card {
+  border: 1px solid #e3ebfa;
 }
 
 /* Messages d'alerte */
@@ -103,7 +125,7 @@ form {
 .form-control:focus,
 .form-select:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.18);
   outline: none;
 }
 
