@@ -1,0 +1,58 @@
+<div class="container py-4 detail-page">
+  <div class="d-flex justify-content-between align-items-center mb-4 detail-header">
+    <div>
+      <span class="header-chip">Fiche étudiant</span>
+      <h2 class="mb-0 mt-2">Détails étudiant</h2>
+    </div>
+    <button class="btn btn-outline-secondary" (click)="goToList()">
+      <i class="bi bi-arrow-left"></i> Retour a la liste
+    </button>
+  </div>
+
+  <div class="text-center py-5" *ngIf="loading">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+    <p class="text-muted mt-3 mb-0">Chargement des details...</p>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="!loading && errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="card shadow-sm detail-card" *ngIf="!loading && etudiant">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <p class="mb-1 text-muted label">Nom</p>
+          <p class="fw-semibold value">{{ etudiant.nom }}</p>
+        </div>
+        <div class="col-md-6">
+          <p class="mb-1 text-muted label">Prénom</p>
+          <p class="fw-semibold value">{{ etudiant.prenom }}</p>
+        </div>
+        <div class="col-md-6">
+          <p class="mb-1 text-muted label">Email</p>
+          <p class="fw-semibold value">{{ etudiant.email }}</p>
+        </div>
+        <div class="col-md-6">
+          <p class="mb-1 text-muted label">Matricule</p>
+          <p class="fw-semibold value">{{ etudiant.matricule }}</p>
+        </div>
+        <div class="col-md-6">
+          <p class="mb-1 text-muted label">Filière</p>
+          <p class="fw-semibold value">{{ etudiant.filiere }}</p>
+        </div>
+        <div class="col-md-6">
+          <p class="mb-1 text-muted label">Niveau</p>
+          <p class="fw-semibold value">{{ etudiant.niveau }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-white border-top-0 pb-3">
+      <button class="btn btn-primary" (click)="goToEdit()">
+        <i class="bi bi-pencil"></i> Modifier
+      </button>
+    </div>
+  </div>
+</div>
