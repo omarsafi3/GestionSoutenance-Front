@@ -9,19 +9,22 @@ import { EncadrantsFormComponent } from './encadrants/form/form.component';
 import { EncadrantsDetailComponent } from './encadrants/detail/detail.component';
 import { JurysPageComponent } from './features/jurys/pages/jurys-page.component';
 import { NotesPageComponent } from './features/notes/pages/notes-page.component';
+import { LoginPageComponent } from './core/auth/login-page.component';
+import { roleGuard } from './core/auth/guards/role.guard';
 
 const routes: Routes = [
+  { path: 'login', component: LoginPageComponent, data: { title: 'Connexion' } },
   { path: '', redirectTo: 'etudiants', pathMatch: 'full' },
-  { path: 'etudiants', component: ListComponent, data: { title: 'Liste des etudiants' } },
-  { path: 'etudiants/add', component: FormComponent, data: { title: 'Ajouter un etudiant' } },
-  { path: 'etudiants/edit/:id', component: FormComponent, data: { title: 'Modifier etudiant' } },
-  { path: 'etudiants/:id', component: DetailComponent, data: { title: 'Detail etudiant' } },
-  { path: 'encadrants', component: EncadrantsListComponent, data: { title: 'Liste des encadrants' } },
-  { path: 'encadrants/add', component: EncadrantsFormComponent, data: { title: 'Ajouter un encadrant' } },
-  { path: 'encadrants/edit/:id', component: EncadrantsFormComponent, data: { title: 'Modifier encadrant' } },
-  { path: 'encadrants/:id', component: EncadrantsDetailComponent, data: { title: 'Detail encadrant' } },
-  { path: 'jurys', component: JurysPageComponent, data: { title: 'Gestion des jurys' } },
-  { path: 'notes', component: NotesPageComponent, data: { title: 'Gestion des notes' } },
+  { path: 'etudiants', component: ListComponent, canActivate: [roleGuard], data: { title: 'Liste des etudiants', roles: ['ADMIN', 'ENSEIGNANT'] } },
+  { path: 'etudiants/add', component: FormComponent, canActivate: [roleGuard], data: { title: 'Ajouter un etudiant', roles: ['ADMIN'] } },
+  { path: 'etudiants/edit/:id', component: FormComponent, canActivate: [roleGuard], data: { title: 'Modifier etudiant', roles: ['ADMIN'] } },
+  { path: 'etudiants/:id', component: DetailComponent, canActivate: [roleGuard], data: { title: 'Detail etudiant', roles: ['ADMIN', 'ENSEIGNANT'] } },
+  { path: 'encadrants', component: EncadrantsListComponent, canActivate: [roleGuard], data: { title: 'Liste des encadrants', roles: ['ADMIN', 'ENSEIGNANT'] } },
+  { path: 'encadrants/add', component: EncadrantsFormComponent, canActivate: [roleGuard], data: { title: 'Ajouter un encadrant', roles: ['ADMIN'] } },
+  { path: 'encadrants/edit/:id', component: EncadrantsFormComponent, canActivate: [roleGuard], data: { title: 'Modifier encadrant', roles: ['ADMIN'] } },
+  { path: 'encadrants/:id', component: EncadrantsDetailComponent, canActivate: [roleGuard], data: { title: 'Detail encadrant', roles: ['ADMIN', 'ENSEIGNANT'] } },
+  { path: 'jurys', component: JurysPageComponent, canActivate: [roleGuard], data: { title: 'Gestion des jurys', roles: ['ADMIN'] } },
+  { path: 'notes', component: NotesPageComponent, canActivate: [roleGuard], data: { title: 'Gestion des notes', roles: ['ADMIN', 'ENSEIGNANT'] } },
   // Catch-all route
   { path: '**', redirectTo: 'etudiants' }
 ];

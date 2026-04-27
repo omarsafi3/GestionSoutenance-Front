@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Etudiant } from '../models/etudiant';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EtudiantService {
-  private apiUrl = 'http://localhost:8081/api/etudiants';
+  private readonly apiUrl = `${environment.apiUrl}/etudiants`;
   
   // État centralisé
   private etudiants$ = new BehaviorSubject<Etudiant[]>([]);

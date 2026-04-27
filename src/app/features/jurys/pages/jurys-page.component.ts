@@ -115,8 +115,9 @@ export class JurysPageComponent implements OnInit {
 
     this.clearMessages();
     this.juryService.affecter(this.form).subscribe({
-      next: data => {
-        this.jury = data;
+      next: () => {
+        this.lookupSoutenanceId = this.form.soutenanceId;
+        this.loadJury();
         this.successMessage = 'Jury affecte avec succes.';
       },
       error: err => this.setError(err)

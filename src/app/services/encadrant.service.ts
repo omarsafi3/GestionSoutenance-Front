@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Encadrant } from '../models/encadrant';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EncadrantService {
-  private apiUrl = 'http://localhost:8081/api/encadrants';
+  private readonly apiUrl = `${environment.apiUrl}/encadrants`;
   private encadrants$ = new BehaviorSubject<Encadrant[]>([]);
   private loading$ = new BehaviorSubject<boolean>(false);
   private error$ = new BehaviorSubject<string | null>(null);

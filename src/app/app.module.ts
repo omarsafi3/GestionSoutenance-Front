@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -13,6 +13,7 @@ import { DetailComponent } from './etudiants/detail/detail.component';
 import { EncadrantsListComponent } from './encadrants/list/list.component';
 import { EncadrantsFormComponent } from './encadrants/form/form.component';
 import { EncadrantsDetailComponent } from './encadrants/detail/detail.component';
+import { JwtInterceptor } from './core/auth/interceptors/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,13 @@ import { EncadrantsDetailComponent } from './encadrants/detail/detail.component'
     RouterModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
