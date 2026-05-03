@@ -1,0 +1,28 @@
+<div class="container">
+  <h2>Soutenances</h2>
+
+  <button (click)="add()">Ajouter</button>
+
+  <div *ngIf="loading">Chargement...</div>
+
+  <table>
+    <tr>
+      <th>Titre</th>
+      <th>Date</th>
+      <th>Durée</th>
+      <th>Statut</th>
+      <th>Actions</th>
+    </tr>
+
+    <tr *ngFor="let s of soutenances">
+      <td>{{ s.titre }}</td>
+      <td>{{ s.date }}</td>
+      <td>{{ s.duree }} min</td>
+      <td>{{ s.statut }}</td>
+      <td>
+        <button (click)="edit(s.id)">Edit</button>
+        <button (click)="delete(s.id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+</div>

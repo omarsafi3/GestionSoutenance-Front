@@ -14,7 +14,12 @@ import { EncadrantsListComponent } from './encadrants/list/list.component';
 import { EncadrantsFormComponent } from './encadrants/form/form.component';
 import { EncadrantsDetailComponent } from './encadrants/detail/detail.component';
 import { JwtInterceptor } from './core/auth/interceptors/jwt.interceptor';
-
+import { EnseignantListComponent } from './features/enseignant/enseignant-list/enseignant-list.component';
+import { EnseignantFormComponent } from './features/enseignant/enseignant-form/enseignant-form.component';
+import { SalleListComponent } from './features/salles/salle-list/salle-list.component';
+import { SalleFormComponent } from './features/salles/salle-form/salle-form.component';
+import { SoutenanceListComponent } from './features/soutenances/soutenance-list/soutenance-list.component';
+import { SoutenanceFormComponent } from './features/soutenances/soutenance-form/soutenance-form.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +28,13 @@ import { JwtInterceptor } from './core/auth/interceptors/jwt.interceptor';
     DetailComponent,
     EncadrantsListComponent,
     EncadrantsFormComponent,
-    EncadrantsDetailComponent
+    EncadrantsDetailComponent,
+    EnseignantListComponent,
+    EnseignantFormComponent,
+    SalleListComponent,
+    SalleFormComponent,
+    SoutenanceListComponent,
+    SoutenanceFormComponent
   ],
   imports: [
     BrowserModule,

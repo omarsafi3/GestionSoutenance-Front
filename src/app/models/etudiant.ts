@@ -6,4 +6,5 @@ export interface Etudiant {
   matricule: string;
   filiere: string;
   niveau: string;
+  encadrantId?: number;
 }

@@ -1,0 +1,62 @@
+<h2 style="text-align: center;">Form Soutenance</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+  <input placeholder="Titre" formControlName="titre">
+
+  <input type="datetime-local" formControlName="date">
+
+  <input type="number" placeholder="Durée (min)" formControlName="duree">
+
+  <!-- Statut -->
+  <select formControlName="statut">
+    <option value="">-- sélectionner statut --</option>
+    <option value="PLANIFIEE">PLANIFIEE</option>
+    <option value="EN_COURS">EN_COURS</option>
+    <option value="TERMINEE">TERMINEE</option>
+    <option value="ANNULEE">ANNULEE</option>
+  </select>
+
+  <!-- President -->
+  <select formControlName="presidentId">
+    <option value="">-- président --</option>
+    <option *ngFor="let e of enseignants" [value]="e.id">
+      {{ e.nom }} {{ e.prenom }}
+    </option>
+  </select>
+
+  <!-- Rapporteur -->
+  <select formControlName="rapporteurId">
+    <option value="">-- rapporteur --</option>
+    <option *ngFor="let e of enseignants" [value]="e.id">
+      {{ e.nom }} {{ e.prenom }}
+    </option>
+  </select>
+
+  <!-- Examinateur -->
+  <select formControlName="examinateurId">
+    <option value="">-- examinateur --</option>
+    <option *ngFor="let e of enseignants" [value]="e.id">
+      {{ e.nom }} {{ e.prenom }}
+    </option>
+  </select>
+
+  <!-- Salle -->
+  <select formControlName="salleId">
+    <option value="">-- salle --</option>
+    <option *ngFor="let s of salles" [value]="s.id">
+      {{ s.nom }} ({{ s.localisation }})
+    </option>
+  </select>
+
+  <!-- Etudiant -->
+  <select formControlName="etudiantId">
+    <option value="">-- étudiant --</option>
+    <option *ngFor="let et of etudiants" [value]="et.id">
+      {{ et.nom }} {{ et.prenom }}
+    </option>
+  </select>
+
+  <button type="submit">Save</button>
+
+</form>

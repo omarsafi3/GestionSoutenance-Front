@@ -1,0 +1,16 @@
+<h2>Form Salle</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+  <input placeholder="Nom" formControlName="nom">
+  <input type="number" placeholder="Capacité" formControlName="capacite">
+  <input placeholder="Localisation" formControlName="localisation">
+
+  <label>
+    <input type="checkbox" formControlName="disponible">
+    Disponible
+  </label>
+
+  <button type="submit">Save</button>
+
+</form>

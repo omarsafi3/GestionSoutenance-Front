@@ -1,0 +1,30 @@
+<div>
+  <h2>Enseignants</h2>
+
+  <button (click)="add()">Ajouter</button>
+
+  <div *ngIf="loading">Loading...</div>
+
+  <table border="1" width="100%">
+    <tr>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Email</th>
+      <th>Grade</th>
+      <th>Spécialité</th>
+      <th>Actions</th>
+    </tr>
+
+    <tr *ngFor="let e of enseignants">
+      <td>{{ e.nom }}</td>
+      <td>{{ e.prenom }}</td>
+      <td>{{ e.email }}</td>
+      <td>{{ e.grade }}</td>
+      <td>{{ e.specialite }}</td>
+      <td>
+        <button (click)="edit(e.id)">Edit</button>
+        <button (click)="delete(e.id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+</div>

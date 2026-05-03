@@ -1,0 +1,13 @@
+<h2>Form Enseignant</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+  <input placeholder="Nom" formControlName="nom">
+  <input placeholder="Prénom" formControlName="prenom">
+  <input placeholder="Email" formControlName="email">
+  <input placeholder="Grade" formControlName="grade">
+  <input placeholder="Spécialité" formControlName="specialite">
+
+  <button type="submit">Save</button>
+
+</form>

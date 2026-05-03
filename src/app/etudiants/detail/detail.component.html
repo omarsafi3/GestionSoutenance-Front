@@ -5,15 +5,13 @@
       <h2 class="mb-0 mt-2">Détails étudiant</h2>
     </div>
     <button class="btn btn-outline-secondary" (click)="goToList()">
-      <i class="bi bi-arrow-left"></i> Retour a la liste
+      <i class="bi bi-arrow-left"></i> Retour à la liste
     </button>
   </div>
 
   <div class="text-center py-5" *ngIf="loading">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Chargement...</span>
-    </div>
-    <p class="text-muted mt-3 mb-0">Chargement des details...</p>
+    <div class="spinner-border text-primary"></div>
+    <p class="text-muted mt-3">Chargement des détails...</p>
   </div>
 
   <div class="alert alert-danger" *ngIf="!loading && errorMessage">
@@ -23,32 +21,45 @@
   <div class="card shadow-sm detail-card" *ngIf="!loading && etudiant">
     <div class="card-body">
       <div class="row g-3">
+
         <div class="col-md-6">
-          <p class="mb-1 text-muted label">Nom</p>
-          <p class="fw-semibold value">{{ etudiant.nom }}</p>
+          <p class="text-muted mb-1">Nom</p>
+          <p class="fw-semibold">{{ etudiant.nom }}</p>
         </div>
+
         <div class="col-md-6">
-          <p class="mb-1 text-muted label">Prénom</p>
-          <p class="fw-semibold value">{{ etudiant.prenom }}</p>
+          <p class="text-muted mb-1">Prénom</p>
+          <p class="fw-semibold">{{ etudiant.prenom }}</p>
         </div>
+
         <div class="col-md-6">
-          <p class="mb-1 text-muted label">Email</p>
-          <p class="fw-semibold value">{{ etudiant.email }}</p>
+          <p class="text-muted mb-1">Email</p>
+          <p class="fw-semibold">{{ etudiant.email }}</p>
         </div>
+
         <div class="col-md-6">
-          <p class="mb-1 text-muted label">Matricule</p>
-          <p class="fw-semibold value">{{ etudiant.matricule }}</p>
+          <p class="text-muted mb-1">Matricule</p>
+          <p class="fw-semibold">{{ etudiant.matricule }}</p>
         </div>
+
         <div class="col-md-6">
-          <p class="mb-1 text-muted label">Filière</p>
-          <p class="fw-semibold value">{{ etudiant.filiere }}</p>
+          <p class="text-muted mb-1">Filière</p>
+          <p class="fw-semibold">{{ etudiant.filiere }}</p>
         </div>
+
         <div class="col-md-6">
-          <p class="mb-1 text-muted label">Niveau</p>
-          <p class="fw-semibold value">{{ etudiant.niveau }}</p>
+          <p class="text-muted mb-1">Niveau</p>
+          <p class="fw-semibold">{{ etudiant.niveau }}</p>
         </div>
+
+        <div class="col-md-6">
+          <p class="text-muted mb-1">Encadrant ID</p>
+          <p class="fw-semibold">{{ etudiant.encadrantId || '-' }}</p>
+        </div>
+
       </div>
     </div>
+
     <div class="card-footer bg-white border-top-0 pb-3">
       <button class="btn btn-primary" (click)="goToEdit()">
         <i class="bi bi-pencil"></i> Modifier

@@ -1,0 +1,79 @@
+/* Container */
+.container {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Header */
+h2 {
+  font-weight: 700;
+  color: #0d6efd;
+  margin-bottom: 1.5rem;
+}
+
+/* Button */
+button {
+  background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+/* Table */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+th {
+  background-color: #0d6efd;
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Actions */
+td button {
+  margin-right: 5px;
+  background-color: #6c757d;
+}
+
+td button:hover {
+  background-color: #5a6268;
+}
+
+td button:last-child {
+  background-color: #dc3545;
+}
+
+td button:last-child:hover {
+  background-color: #bb2d3b;
+}
+
+/* Loading */
+div[ng-reflect-ng-if] {
+  color: #0d6efd;
+  font-weight: 500;
+}

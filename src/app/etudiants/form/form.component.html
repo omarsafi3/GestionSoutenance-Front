@@ -1,189 +1,94 @@
 <div class="container form-page mt-5 mb-5">
   <div class="row justify-content-center">
     <div class="col-md-7">
-      <!-- Header -->
+
       <div class="mb-4 form-header">
         <span class="header-chip">
           <i class="bi bi-mortarboard"></i> Module Étudiants
         </span>
+
         <h2 class="display-6">
-          <i class="bi bi-person-fill-add"></i>
           {{ isEditMode ? 'Modifier Étudiant' : 'Ajouter un Étudiant' }}
         </h2>
-        <p class="text-muted">
-          {{ isEditMode ? 'Mettez à jour les informations de l\'étudiant' : 'Remplissez tous les champs requis' }}
-        </p>
       </div>
 
-      <!-- Messages globaux -->
-      <div class="alert alert-success alert-dismissible fade show" *ngIf="successMessage" role="alert">
-        <i class="bi bi-check-circle"></i> {{ successMessage }}
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        {{ errorMessage }}
       </div>
 
-      <div class="alert alert-danger alert-dismissible fade show" *ngIf="errorMessage" role="alert">
-        <i class="bi bi-exclamation-circle"></i> {{ errorMessage }}
-      </div>
-
-      <!-- Card du formulaire -->
       <div class="card shadow-lg form-card">
         <div class="card-body p-4">
           <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <!-- Nom -->
+
+            <!-- NOM -->
             <div class="mb-3">
-              <label for="nom" class="form-label fw-bold">
-                Nom <span class="text-danger">*</span>
-              </label>
-              <input 
-                type="text" 
-                class="form-control"
-                id="nom"
-                formControlName="nom"
-                placeholder="Ex: DUPONT"
-                [class.is-invalid]="isFieldInvalid('nom')"
-                [disabled]="loading">
-              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('nom')">
-                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('nom') }}
-              </div>
-              <small class="form-text text-muted d-block mt-1">
-                Minimum 2 caractères
-              </small>
+              <label class="form-label">Nom *</label>
+              <input class="form-control" formControlName="nom">
             </div>
 
-            <!-- Prénom -->
+            <!-- PRENOM -->
             <div class="mb-3">
-              <label for="prenom" class="form-label fw-bold">
-                Prénom <span class="text-danger">*</span>
-              </label>
-              <input 
-                type="text" 
-                class="form-control"
-                id="prenom"
-                formControlName="prenom"
-                placeholder="Ex: Jean"
-                [class.is-invalid]="isFieldInvalid('prenom')"
-                [disabled]="loading">
-              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('prenom')">
-                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('prenom') }}
-              </div>
-              <small class="form-text text-muted d-block mt-1">
-                Minimum 2 caractères
-              </small>
+              <label class="form-label">Prénom *</label>
+              <input class="form-control" formControlName="prenom">
             </div>
 
-            <!-- Email -->
+            <!-- EMAIL -->
             <div class="mb-3">
-              <label for="email" class="form-label fw-bold">
-                Email <span class="text-danger">*</span>
-              </label>
-              <input 
-                type="email" 
-                class="form-control"
-                id="email"
-                formControlName="email"
-                placeholder="Ex: jean.dupont@example.com"
-                [class.is-invalid]="isFieldInvalid('email')"
-                [disabled]="loading">
-              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('email')">
-                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('email') }}
-              </div>
+              <label class="form-label">Email *</label>
+              <input class="form-control" formControlName="email">
             </div>
 
-            <!-- Matricule -->
+            <!-- MATRICULE -->
             <div class="mb-3">
-              <label for="matricule" class="form-label fw-bold">
-                Matricule <span class="text-danger">*</span>
-              </label>
-              <input 
-                type="text" 
-                class="form-control"
-                id="matricule"
-                formControlName="matricule"
-                placeholder="Ex: MAT123456"
-                [class.is-invalid]="isFieldInvalid('matricule')"
-                [disabled]="loading">
-              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('matricule')">
-                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('matricule') }}
-              </div>
-              <small class="form-text text-muted d-block mt-1">
-                Lettres et chiffres uniquement (ex: MAT123456)
-              </small>
+              <label class="form-label">Matricule *</label>
+              <input class="form-control" formControlName="matricule">
             </div>
 
-            <!-- Filière -->
+            <!-- FILIERE -->
             <div class="mb-3">
-              <label for="filiere" class="form-label fw-bold">
-                Filière <span class="text-danger">*</span>
-              </label>
-              <select 
-                class="form-select"
-                id="filiere"
-                formControlName="filiere"
-                [class.is-invalid]="isFieldInvalid('filiere')"
-                [disabled]="loading">
-                <option value="">-- Sélectionnez une filière --</option>
-                <option *ngFor="let filiere of filieres" [value]="filiere">
-                  {{ filiere }}
+              <label class="form-label">Filière *</label>
+              <select class="form-select" formControlName="filiere">
+                <option value="">-- choisir --</option>
+                <option *ngFor="let f of filieres" [value]="f">{{ f }}</option>
+              </select>
+            </div>
+
+            <!-- NIVEAU -->
+            <div class="mb-3">
+              <label class="form-label">Niveau *</label>
+              <select class="form-select" formControlName="niveau">
+                <option value="">-- choisir --</option>
+                <option *ngFor="let n of niveaux" [value]="n">{{ n }}</option>
+              </select>
+            </div>
+
+            <!-- ENCADRANT -->
+            <div class="mb-3">
+              <label class="form-label">Encadrant *</label>
+
+              <select class="form-select" formControlName="encadrantId">
+                <option value="">-- choisir un encadrant --</option>
+
+                <option *ngFor="let e of enseignants" [value]="e.id">
+                  {{ e.id }}
                 </option>
               </select>
-              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('filiere')">
-                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('filiere') }}
-              </div>
             </div>
 
-            <!-- Niveau -->
-            <div class="mb-4">
-              <label for="niveau" class="form-label fw-bold">
-                Niveau <span class="text-danger">*</span>
-              </label>
-              <select 
-                class="form-select"
-                id="niveau"
-                formControlName="niveau"
-                [class.is-invalid]="isFieldInvalid('niveau')"
-                [disabled]="loading">
-                <option value="">-- Sélectionnez un niveau --</option>
-                <option *ngFor="let niveau of niveaux" [value]="niveau">
-                  {{ niveau }}
-                </option>
-              </select>
-              <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('niveau')">
-                <i class="bi bi-exclamation-circle"></i> {{ getFieldError('niveau') }}
-              </div>
-            </div>
+            <div class="d-flex gap-2 justify-content-end">
+              <button type="button" class="btn btn-secondary" (click)="cancel()">
+                Annuler
+              </button>
 
-            <!-- Boutons d'action -->
-            <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
-              <button 
-                type="reset"
-                class="btn btn-outline-secondary"
-                (click)="resetForm()"
-                [disabled]="loading">
-                <i class="bi bi-arrow-clockwise"></i> Réinitialiser
-              </button>
-              <button 
-                type="button"
-                class="btn btn-secondary"
-                (click)="cancel()"
-                [disabled]="loading">
-                <i class="bi bi-x-lg"></i> Annuler
-              </button>
-              <button 
-                type="submit"
-                class="btn btn-primary"
-                [disabled]="form.invalid || loading">
-                <span class="spinner-border spinner-border-sm me-2" *ngIf="loading" role="status" aria-hidden="true"></span>
-                <i class="bi bi-check-circle" *ngIf="!loading"></i>
-                {{ isEditMode ? 'Mettre à jour' : 'Créer' }}
+              <button type="submit" class="btn btn-primary">
+                {{ isEditMode ? 'Modifier' : 'Créer' }}
               </button>
             </div>
 
-            <!-- Note sur les champs obligatoires -->
-            <small class="form-text text-muted d-block mt-3">
-              <i class="bi bi-info-circle"></i> Les champs marqués d'un <span class="text-danger">*</span> sont obligatoires
-            </small>
           </form>
         </div>
       </div>
+
     </div>
   </div>
 </div>

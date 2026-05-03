@@ -11,34 +11,27 @@ import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit, OnDestroy {
-  // Data
   allEtudiants: Etudiant[] = [];
   filteredEtudiants: Etudiant[] = [];
-  
-  // State
+
   loading = false;
   successMessage = '';
   errorMessage = '';
-  
-  // Pagination
+
   pageSize = 5;
   currentPage = 1;
   totalPages = 1;
-  
-  // Search & Filter
+
   searchTerm = '';
   filterNiveau = '';
   filterFiliere = '';
-  
-  // Options uniques pour les filtres
+
   niveauxUniques: string[] = [];
   filiereUniques: string[] = [];
-  
-  // Modal delete
+
   selectedIdToDelete: number | null = null;
   showDeleteConfirm = false;
-  
-  // Cleanup
+
   private destroy$ = new Subject<void>();
   private searchSubject$ = new Subject<string>();
 
@@ -46,7 +39,6 @@ export class ListComponent implements OnInit, OnDestroy {
     private service: EtudiantService,
     private router: Router
   ) {
-    // Debounce la recherche
     this.searchSubject$
       .pipe(
         debounceTime(300),
@@ -62,12 +54,11 @@ export class ListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadEtudiants();
-    
-    // S'abonner aux changements du service
+
     this.service.getLoading()
       .pipe(takeUntil(this.destroy$))
       .subscribe(loading => this.loading = loading);
-      
+
     this.service.getError()
       .pipe(takeUntil(this.destroy$))
       .subscribe(error => {
@@ -84,6 +75,7 @@ export class ListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.allEtudiants = data;
+
           this.extractFilterOptions();
           this.applyFilters();
         }
@@ -98,10 +90,9 @@ export class ListComponent implements OnInit, OnDestroy {
   applyFilters(): void {
     let filtered = this.allEtudiants;
 
-    // Filtre par recherche
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(e => 
+      filtered = filtered.filter(e =>
         e.nom.toLowerCase().includes(term) ||
         e.prenom.toLowerCase().includes(term) ||
         e.email.toLowerCase().includes(term) ||
@@ -109,18 +100,16 @@ export class ListComponent implements OnInit, OnDestroy {
       );
     }
 
-    // Filtre par niveau
     if (this.filterNiveau) {
       filtered = filtered.filter(e => e.niveau === this.filterNiveau);
     }
 
-    // Filtre par filière
     if (this.filterFiliere) {
       filtered = filtered.filter(e => e.filiere === this.filterFiliere);
     }
 
     this.filteredEtudiants = filtered;
-    this.totalPages = Math.ceil(this.filteredEtudiants.length / this.pageSize);
+    this.totalPages = Math.ceil(this.filteredEtudiants.length / this.pageSize) || 1;
     this.currentPage = 1;
   }
 
@@ -133,22 +122,17 @@ export class ListComponent implements OnInit, OnDestroy {
     this.applyFilters();
   }
 
-  // Pagination
   get paginatedEtudiants(): Etudiant[] {
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    return this.filteredEtudiants.slice(startIndex, startIndex + this.pageSize);
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredEtudiants.slice(start, start + this.pageSize);
   }
 
   previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
+    if (this.currentPage > 1) this.currentPage--;
   }
 
   nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-    }
+    if (this.currentPage < this.totalPages) this.currentPage++;
   }
 
   goToPage(page: number): void {
@@ -157,17 +141,12 @@ export class ListComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Actions CRUD
-  view(id: number | undefined): void {
-    if (id) {
-      this.router.navigate(['/etudiants', id]);
-    }
+  view(id?: number): void {
+    if (id) this.router.navigate(['/etudiants', id]);
   }
 
-  edit(id: number | undefined): void {
-    if (id) {
-      this.router.navigate(['/etudiants/edit', id]);
-    }
+  edit(id?: number): void {
+    if (id) this.router.navigate(['/etudiants/edit', id]);
   }
 
   openDeleteConfirm(id: number): void {
@@ -181,40 +160,40 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   confirmDelete(): void {
-    if (this.selectedIdToDelete) {
-      this.service.delete(this.selectedIdToDelete)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            if (this.selectedIdToDelete !== null) {
-              this.allEtudiants = this.allEtudiants.filter(e => e.id !== this.selectedIdToDelete);
-              this.extractFilterOptions();
-              this.applyFilters();
-            }
-            this.successMessage = 'Étudiant supprimé avec succès';
-            this.showDeleteConfirm = false;
-            this.selectedIdToDelete = null;
-            setTimeout(() => this.successMessage = '', 3000);
-          },
-          error: (error) => {
-            this.errorMessage = error.message || 'Erreur lors de la suppression de l\'étudiant';
-            this.showDeleteConfirm = false;
-            this.selectedIdToDelete = null;
-          },
-        });
-    }
+    if (!this.selectedIdToDelete) return;
+
+    this.service.delete(this.selectedIdToDelete)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.allEtudiants = this.allEtudiants.filter(e => e.id !== this.selectedIdToDelete);
+
+          this.extractFilterOptions();
+          this.applyFilters();
+
+          this.successMessage = 'Étudiant supprimé avec succès';
+          this.showDeleteConfirm = false;
+          this.selectedIdToDelete = null;
+
+          setTimeout(() => this.successMessage = '', 3000);
+        },
+        error: (err) => {
+          this.errorMessage = err.message || 'Erreur lors de la suppression';
+          this.showDeleteConfirm = false;
+          this.selectedIdToDelete = null;
+        }
+      });
   }
 
   resetFilters(): void {
     this.searchTerm = '';
     this.filterNiveau = '';
     this.filterFiliere = '';
-    this.currentPage = 1;
     this.applyFilters();
   }
 
   get hasFilters(): boolean {
-    return this.searchTerm !== '' || this.filterNiveau !== '' || this.filterFiliere !== '';
+    return !!(this.searchTerm || this.filterNiveau || this.filterFiliere);
   }
 
   ngOnDestroy(): void {

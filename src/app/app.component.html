@@ -21,8 +21,8 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/encadrants']" routerLinkActive="active">
-            <i class="bi bi-person-badge"></i> Encadrants
+          <a class="nav-link" [routerLink]="['/enseignants']" routerLinkActive="active">
+            <i class="bi bi-person-badge"></i> Enseignants
           </a>
         </li>
         <li class="nav-item dropdown">
@@ -31,9 +31,9 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" [routerLink]="['/jurys']" routerLinkActive="active">Jurys</a></li>
-            <li><a class="dropdown-item" href="#">Soutenances</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/soutenances']" routerLinkActive="active">Soutenances</a></li>
             <li><a class="dropdown-item" [routerLink]="['/notes']" routerLinkActive="active">Notes</a></li>
-            <li><a class="dropdown-item" href="#">Salles</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/salles']" routerLinkActive="active">Salles</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Résultats</a></li>
           </ul>

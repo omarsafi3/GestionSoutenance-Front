@@ -14,6 +14,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   etudiant: Etudiant | null = null;
   loading = false;
   errorMessage = '';
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -25,37 +26,23 @@ export class DetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.service.getLoading()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((loading) => this.loading = loading);
+      .subscribe(l => this.loading = l);
 
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (!id) {
-      this.errorMessage = 'Identifiant etudiant invalide.';
+      this.errorMessage = 'Identifiant étudiant invalide.';
       return;
     }
 
-    this.service.exists(id)
+    this.service.getById(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (exists) => {
-          if (!exists) {
-            this.errorMessage = 'Etudiant introuvable.';
-            return;
-          }
-
-          this.service.getById(id)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-              next: (etudiant) => {
-                this.etudiant = etudiant;
-                this.errorMessage = '';
-              },
-              error: () => {
-                this.errorMessage = 'Impossible de charger les details de l etudiant.';
-              }
-            });
+        next: (data) => {
+          this.etudiant = data;
+          this.errorMessage = '';
         },
         error: () => {
-          this.errorMessage = 'Impossible de verifier cet etudiant.';
+          this.errorMessage = 'Impossible de charger les détails de l étudiant.';
         }
       });
   }
