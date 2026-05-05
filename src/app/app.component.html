@@ -1,69 +1,104 @@
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-  <div class="container-fluid px-4">
-    <a class="navbar-brand fw-bold" [routerLink]="['/etudiants']">
-      <i class="bi bi-mortarboard-fill"></i>
-      Gestion des Soutenances
+<div class="app-shell" *ngIf="{ session: (session$ | async) } as state">
+  <header class="topbar glass">
+    <a class="brand" [routerLink]="homeLink(state.session)" aria-label="Accueil Gestion des Soutenances">
+      <span class="brand-mark">
+        <lucide-icon name="graduation-cap" [size]="24"></lucide-icon>
+      </span>
+      <span>
+        <strong>Gestion Soutenance</strong>
+        <small>SOA Academic Ops</small>
+      </span>
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+
+    <button class="nav-toggle" type="button" (click)="toggleNav()" [attr.aria-expanded]="navOpen" aria-label="Menu">
+      <lucide-icon [name]="navOpen ? 'x' : 'menu'" [size]="22"></lucide-icon>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/etudiants']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-            <i class="bi bi-house"></i> Accueil
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/etudiants']" routerLinkActive="active">
-            <i class="bi bi-people"></i> Étudiants
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/enseignants']" routerLinkActive="active">
-            <i class="bi bi-person-badge"></i> Enseignants
-          </a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-list-ul"></i> Modules
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" [routerLink]="['/jurys']" routerLinkActive="active">Jurys</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/soutenances']" routerLinkActive="active">Soutenances</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/notes']" routerLinkActive="active">Notes</a></li>
-            <li><a class="dropdown-item" [routerLink]="['/salles']" routerLinkActive="active">Salles</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Résultats</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
-<!-- Main Content -->
-<main class="main-content">
-  <router-outlet></router-outlet>
-</main>
+    <nav class="primary-nav" [class.is-open]="navOpen" *ngIf="isAuthenticated(); else guestNav">
+      <a *ngIf="canAccess(['ADMIN'])" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <lucide-icon name="layout-dashboard" [size]="18"></lucide-icon>
+        Accueil
+      </a>
+      <a *ngIf="canAccess(['ADMIN'])" [routerLink]="['/etudiants']" routerLinkActive="active">
+        <lucide-icon name="users" [size]="18"></lucide-icon>
+        Etudiants
+      </a>
+      <a *ngIf="canAccess(['ADMIN'])" [routerLink]="['/enseignants']" routerLinkActive="active">
+        <lucide-icon name="user-round-cog" [size]="18"></lucide-icon>
+        Enseignants
+      </a>
+      <a [routerLink]="['/soutenances']" routerLinkActive="active">
+        <lucide-icon name="calendar-days" [size]="18"></lucide-icon>
+        Soutenances
+      </a>
 
-<!-- Footer -->
-<footer class="bg-light border-top mt-5 py-4">
-  <div class="container-fluid px-4">
-    <div class="row">
-      <div class="col-md-6">
-        <p class="mb-0">
-          <strong>&copy; 2026 Gestion des Soutenances</strong>
-        </p>
-        <small class="text-muted">Application de gestion des soutenances académiques</small>
+      <div class="nav-menu">
+        <button type="button" (click)="toggleModules($event)" [class.active]="modulesOpen">
+          <lucide-icon name="clipboard-list" [size]="18"></lucide-icon>
+          Modules
+        </button>
+        <div class="nav-menu-panel" [class.is-open]="modulesOpen">
+          <a *ngIf="canAccess(['ADMIN'])" [routerLink]="['/jurys']" routerLinkActive="active">
+            <lucide-icon name="shield-check" [size]="17"></lucide-icon>
+            Jurys
+          </a>
+          <a *ngIf="canAccess(['ADMIN', 'ENSEIGNANT'])" [routerLink]="['/notes']" routerLinkActive="active">
+            <lucide-icon name="file-text" [size]="17"></lucide-icon>
+            Notes
+          </a>
+          <a *ngIf="canAccess(['ADMIN'])" [routerLink]="['/salles']" routerLinkActive="active">
+            <lucide-icon name="building-2" [size]="17"></lucide-icon>
+            Salles
+          </a>
+          <a [routerLink]="['/resultats']" routerLinkActive="active">
+            <lucide-icon name="award" [size]="17"></lucide-icon>
+            Resultats
+          </a>
+        </div>
       </div>
-      <div class="col-md-6 text-end">
-        <small class="text-muted">
-          <i class="bi bi-info-circle"></i>
-          Version 1.0.0 | <a [href]="apiUrl" target="_blank" class="text-decoration-none">API Backend</a>
-        </small>
-      </div>
+    </nav>
+
+    <ng-template #guestNav>
+      <nav class="primary-nav guest" [class.is-open]="navOpen">
+        <a [routerLink]="['/login']" routerLinkActive="active">
+          <lucide-icon name="log-in" [size]="18"></lucide-icon>
+          Connexion
+        </a>
+      </nav>
+    </ng-template>
+
+    <div class="session-area" *ngIf="isAuthenticated(); else loginAction">
+      <span class="session-pill" title="Session active">
+        <lucide-icon name="user-circle" [size]="18"></lucide-icon>
+        <span>{{ state.session?.username }}</span>
+        <small>{{ state.session?.role }}</small>
+      </span>
+      <button class="logout-btn" type="button" (click)="logout()" title="Deconnexion">
+        <lucide-icon name="log-out" [size]="18"></lucide-icon>
+        <span>Deconnexion</span>
+      </button>
     </div>
-  </div>
-</footer>
+
+    <ng-template #loginAction>
+      <a class="login-action" [routerLink]="['/login']">
+        <lucide-icon name="log-in" [size]="18"></lucide-icon>
+        Connexion
+      </a>
+    </ng-template>
+  </header>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="app-footer">
+    <div>
+      <strong>Gestion des Soutenances</strong>
+      <span>Application de gestion academique</span>
+    </div>
+    <a [href]="apiUrl" target="_blank" rel="noreferrer">
+      API Backend
+      <lucide-icon name="external-link" [size]="15"></lucide-icon>
+    </a>
+  </footer>
+</div>

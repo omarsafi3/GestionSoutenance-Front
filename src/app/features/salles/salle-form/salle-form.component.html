@@ -1,16 +1,30 @@
-<h2>Form Salle</h2>
+<section class="page-header">
+  <h1>{{ id ? 'Modifier une salle' : 'Ajouter une salle' }}</h1>
+  <p>Renseigner les informations de capacite et de localisation.</p>
+</section>
 
-<form [formGroup]="form" (ngSubmit)="submit()">
+<section class="panel">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+    <label>Nom
+      <input formControlName="nom" placeholder="Salle A1">
+    </label>
 
-  <input placeholder="Nom" formControlName="nom">
-  <input type="number" placeholder="Capacité" formControlName="capacite">
-  <input placeholder="Localisation" formControlName="localisation">
+    <label>Capacite
+      <input type="number" formControlName="capacite" placeholder="40">
+    </label>
 
-  <label>
-    <input type="checkbox" formControlName="disponible">
-    Disponible
-  </label>
+    <label>Localisation
+      <input formControlName="localisation" placeholder="Bloc principal">
+    </label>
 
-  <button type="submit">Save</button>
+    <label class="toggle-field">
+      <input type="checkbox" formControlName="disponible">
+      <span>Disponible</span>
+    </label>
 
-</form>
+    <div class="actions-row">
+      <button class="btn-primary" type="submit" [disabled]="form.invalid">Enregistrer</button>
+      <a class="btn-light" routerLink="/salles">Annuler</a>
+    </div>
+  </form>
+</section>

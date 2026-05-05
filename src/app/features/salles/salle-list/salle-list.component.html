@@ -1,28 +1,50 @@
-<div class="container">
-  <h2>Salles</h2>
+<section class="page-header">
+  <div>
+    <h1>Salles</h1>
+    <p>Gestion des espaces de soutenance, capacites et disponibilites.</p>
+  </div>
+</section>
 
-  <button (click)="add()">Ajouter</button>
+<section class="panel">
+  <div class="actions-row !mt-0 !mb-4">
+    <button class="btn-primary" type="button" (click)="add()">Ajouter une salle</button>
+  </div>
 
-  <div *ngIf="loading">Chargement...</div>
+  <div class="status ok" *ngIf="loading">
+    Chargement des salles...
+  </div>
 
-  <table>
-    <tr>
-      <th>Nom</th>
-      <th>Capacité</th>
-      <th>Localisation</th>
-      <th>Disponible</th>
-      <th>Actions</th>
-    </tr>
+  <div class="table-responsive" *ngIf="!loading && salles.length">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Capacite</th>
+          <th>Localisation</th>
+          <th>Disponible</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of salles">
+          <td><strong>{{ s.nom }}</strong></td>
+          <td>{{ s.capacite }}</td>
+          <td>{{ s.localisation || '-' }}</td>
+          <td>
+            <span class="badge" [class.bg-success]="s.disponible" [class.bg-secondary]="!s.disponible">
+              {{ s.disponible ? 'Oui' : 'Non' }}
+            </span>
+          </td>
+          <td>
+            <div class="actions-row !mt-0">
+              <button class="btn-light btn-sm" type="button" (click)="edit(s.id)">Modifier</button>
+              <button class="btn-danger btn-sm" type="button" (click)="delete(s.id)">Supprimer</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-    <tr *ngFor="let s of salles">
-      <td>{{ s.nom }}</td>
-      <td>{{ s.capacite }}</td>
-      <td>{{ s.localisation }}</td>
-      <td>{{ s.disponible ? 'Oui' : 'Non' }}</td>
-      <td>
-        <button (click)="edit(s.id)">Edit</button>
-        <button (click)="delete(s.id)">Delete</button>
-      </td>
-    </tr>
-  </table>
-</div>
+  <p class="status ok" *ngIf="!loading && !salles.length">Aucune salle disponible.</p>
+</section>

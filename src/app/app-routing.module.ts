@@ -17,34 +17,36 @@ import { SalleListComponent } from './features/salles/salle-list/salle-list.comp
 import { SalleFormComponent } from './features/salles/salle-form/salle-form.component';
 import { SoutenanceListComponent } from './features/soutenances/soutenance-list/soutenance-list.component';
 import { SoutenanceFormComponent } from './features/soutenances/soutenance-form/soutenance-form.component';
+import { ResultatsPageComponent } from './features/resultats/pages/resultats-page.component';
+import { UnauthorizedPageComponent } from './core/auth/unauthorized-page.component';
+import { DashboardPageComponent } from './features/dashboard/dashboard-page.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginPageComponent, data: { title: 'Connexion' } },
-  { path: '', redirectTo: 'etudiants', pathMatch: 'full' },
-  { path: 'etudiants', component: ListComponent, canActivate: [roleGuard], data: { title: 'Liste des etudiants', roles: ['ADMIN', 'ENSEIGNANT'] } },
+  { path: 'unauthorized', component: UnauthorizedPageComponent, data: { title: 'Acces refuse' } },
+  { path: '', component: DashboardPageComponent, canActivate: [roleGuard], data: { title: 'Tableau de bord', roles: ['ADMIN', 'ENSEIGNANT', 'ETUDIANT'] } },
+  { path: 'etudiants', component: ListComponent, canActivate: [roleGuard], data: { title: 'Liste des etudiants', roles: ['ADMIN'] } },
   { path: 'etudiants/add', component: FormComponent, canActivate: [roleGuard], data: { title: 'Ajouter un etudiant', roles: ['ADMIN'] } },
   { path: 'etudiants/edit/:id', component: FormComponent, canActivate: [roleGuard], data: { title: 'Modifier etudiant', roles: ['ADMIN'] } },
   { path: 'etudiants/:id', component: DetailComponent, canActivate: [roleGuard], data: { title: 'Detail etudiant', roles: ['ADMIN', 'ENSEIGNANT'] } },
-  { path: 'encadrants', component: EncadrantsListComponent, canActivate: [roleGuard], data: { title: 'Liste des encadrants', roles: ['ADMIN', 'ENSEIGNANT'] } },
+  { path: 'encadrants', component: EncadrantsListComponent, canActivate: [roleGuard], data: { title: 'Liste des encadrants', roles: ['ADMIN'] } },
   { path: 'encadrants/add', component: EncadrantsFormComponent, canActivate: [roleGuard], data: { title: 'Ajouter un encadrant', roles: ['ADMIN'] } },
   { path: 'encadrants/edit/:id', component: EncadrantsFormComponent, canActivate: [roleGuard], data: { title: 'Modifier encadrant', roles: ['ADMIN'] } },
-  { path: 'encadrants/:id', component: EncadrantsDetailComponent, canActivate: [roleGuard], data: { title: 'Detail encadrant', roles: ['ADMIN', 'ENSEIGNANT'] } },
+  { path: 'encadrants/:id', component: EncadrantsDetailComponent, canActivate: [roleGuard], data: { title: 'Detail encadrant', roles: ['ADMIN'] } },
   { path: 'jurys', component: JurysPageComponent, canActivate: [roleGuard], data: { title: 'Gestion des jurys', roles: ['ADMIN'] } },
   { path: 'notes', component: NotesPageComponent, canActivate: [roleGuard], data: { title: 'Gestion des notes', roles: ['ADMIN', 'ENSEIGNANT'] } },
-  { path: 'enseignants', component: EnseignantListComponent, canActivate: [roleGuard], data: { title: 'Liste des enseignants', roles: ['ADMIN', 'ENSEIGNANT'] } },
+  { path: 'enseignants', component: EnseignantListComponent, canActivate: [roleGuard], data: { title: 'Liste des enseignants', roles: ['ADMIN'] } },
   { path: 'enseignants/add', component: EnseignantFormComponent, canActivate: [roleGuard], data: { title: 'Ajouter enseignant', roles: ['ADMIN'] } },
   { path: 'enseignants/edit/:id', component: EnseignantFormComponent, canActivate: [roleGuard], data: { title: 'Modifier enseignant', roles: ['ADMIN'] } },
-  { path: 'salles', component: SalleListComponent, canActivate: [roleGuard], data: { title: 'Liste des salles', roles: ['ADMIN', 'ENSEIGNANT'] } },
+  { path: 'salles', component: SalleListComponent, canActivate: [roleGuard], data: { title: 'Liste des salles', roles: ['ADMIN'] } },
   { path: 'salles/add', component: SalleFormComponent, canActivate: [roleGuard], data: { title: 'Ajouter une salle', roles: ['ADMIN'] } },
   { path: 'salles/edit/:id', component: SalleFormComponent, canActivate: [roleGuard], data: { title: 'Modifier salle', roles: ['ADMIN'] } },
-  { path: 'salles', component: SalleListComponent, canActivate: [roleGuard], data: { roles: ['ADMIN', 'ENSEIGNANT'] } },
-  { path: 'salles/add', component: SalleFormComponent, canActivate: [roleGuard], data: { roles: ['ADMIN'] } },
-  { path: 'salles/edit/:id', component: SalleFormComponent, canActivate: [roleGuard], data: { roles: ['ADMIN'] } },
-  { path: 'soutenances', component: SoutenanceListComponent, canActivate: [roleGuard], data: { roles: ['ADMIN', 'ENSEIGNANT'] } },
+  { path: 'soutenances', component: SoutenanceListComponent, canActivate: [roleGuard], data: { roles: ['ADMIN', 'ENSEIGNANT', 'ETUDIANT'] } },
   { path: 'soutenances/add', component: SoutenanceFormComponent, canActivate: [roleGuard], data: { roles: ['ADMIN'] } },
   { path: 'soutenances/edit/:id', component: SoutenanceFormComponent, canActivate: [roleGuard], data: { roles: ['ADMIN'] } },
+  { path: 'resultats', component: ResultatsPageComponent, canActivate: [roleGuard], data: { title: 'Resultats', roles: ['ADMIN', 'ENSEIGNANT', 'ETUDIANT'] } },
   // Catch-all route
-  { path: '**', redirectTo: 'etudiants' }
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

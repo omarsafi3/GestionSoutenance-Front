@@ -1,62 +1,70 @@
-<h2 style="text-align: center;">Form Soutenance</h2>
+<section class="page-header">
+  <h1>{{ id ? 'Modifier une soutenance' : 'Ajouter une soutenance' }}</h1>
+  <p>Planification de la session, jury, salle et etudiant concerne.</p>
+</section>
 
-<form [formGroup]="form" (ngSubmit)="submit()">
+<section class="panel">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+    <label>Titre
+      <input formControlName="titre" placeholder="Titre du projet">
+    </label>
 
-  <input placeholder="Titre" formControlName="titre">
+    <label>Date
+      <input type="datetime-local" formControlName="date">
+    </label>
 
-  <input type="datetime-local" formControlName="date">
+    <label>Duree
+      <input type="number" formControlName="duree" placeholder="60">
+    </label>
 
-  <input type="number" placeholder="Durée (min)" formControlName="duree">
+    <label>Statut
+      <select formControlName="statut">
+        <option value="">Selectionner statut</option>
+        <option value="PLANIFIEE">PLANIFIEE</option>
+        <option value="EN_COURS">EN_COURS</option>
+        <option value="TERMINEE">TERMINEE</option>
+        <option value="ANNULEE">ANNULEE</option>
+      </select>
+    </label>
 
-  <!-- Statut -->
-  <select formControlName="statut">
-    <option value="">-- sélectionner statut --</option>
-    <option value="PLANIFIEE">PLANIFIEE</option>
-    <option value="EN_COURS">EN_COURS</option>
-    <option value="TERMINEE">TERMINEE</option>
-    <option value="ANNULEE">ANNULEE</option>
-  </select>
+    <label>President
+      <select formControlName="presidentId">
+        <option value="">President</option>
+        <option *ngFor="let e of enseignants" [value]="e.id">{{ e.nom }} {{ e.prenom }}</option>
+      </select>
+    </label>
 
-  <!-- President -->
-  <select formControlName="presidentId">
-    <option value="">-- président --</option>
-    <option *ngFor="let e of enseignants" [value]="e.id">
-      {{ e.nom }} {{ e.prenom }}
-    </option>
-  </select>
+    <label>Rapporteur
+      <select formControlName="rapporteurId">
+        <option value="">Rapporteur</option>
+        <option *ngFor="let e of enseignants" [value]="e.id">{{ e.nom }} {{ e.prenom }}</option>
+      </select>
+    </label>
 
-  <!-- Rapporteur -->
-  <select formControlName="rapporteurId">
-    <option value="">-- rapporteur --</option>
-    <option *ngFor="let e of enseignants" [value]="e.id">
-      {{ e.nom }} {{ e.prenom }}
-    </option>
-  </select>
+    <label>Examinateur
+      <select formControlName="examinateurId">
+        <option value="">Examinateur</option>
+        <option *ngFor="let e of enseignants" [value]="e.id">{{ e.nom }} {{ e.prenom }}</option>
+      </select>
+    </label>
 
-  <!-- Examinateur -->
-  <select formControlName="examinateurId">
-    <option value="">-- examinateur --</option>
-    <option *ngFor="let e of enseignants" [value]="e.id">
-      {{ e.nom }} {{ e.prenom }}
-    </option>
-  </select>
+    <label>Salle
+      <select formControlName="salleId">
+        <option value="">Salle</option>
+        <option *ngFor="let s of salles" [value]="s.id">{{ s.nom }} ({{ s.localisation }})</option>
+      </select>
+    </label>
 
-  <!-- Salle -->
-  <select formControlName="salleId">
-    <option value="">-- salle --</option>
-    <option *ngFor="let s of salles" [value]="s.id">
-      {{ s.nom }} ({{ s.localisation }})
-    </option>
-  </select>
+    <label>Etudiant
+      <select formControlName="etudiantId">
+        <option value="">Etudiant</option>
+        <option *ngFor="let et of etudiants" [value]="et.id">{{ et.nom }} {{ et.prenom }}</option>
+      </select>
+    </label>
 
-  <!-- Etudiant -->
-  <select formControlName="etudiantId">
-    <option value="">-- étudiant --</option>
-    <option *ngFor="let et of etudiants" [value]="et.id">
-      {{ et.nom }} {{ et.prenom }}
-    </option>
-  </select>
-
-  <button type="submit">Save</button>
-
-</form>
+    <div class="actions-row">
+      <button class="btn-primary" type="submit" [disabled]="form.invalid">Enregistrer</button>
+      <a class="btn-light" routerLink="/soutenances">Annuler</a>
+    </div>
+  </form>
+</section>

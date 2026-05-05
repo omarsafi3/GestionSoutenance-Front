@@ -1,30 +1,48 @@
-<div>
-  <h2>Enseignants</h2>
+<section class="page-header">
+  <div>
+    <h1>Enseignants</h1>
+    <p>Administration des enseignants disponibles pour les jurys.</p>
+  </div>
+</section>
 
-  <button (click)="add()">Ajouter</button>
+<section class="panel">
+  <div class="actions-row !mt-0 !mb-4">
+    <button class="btn-primary" type="button" (click)="add()">Ajouter un enseignant</button>
+  </div>
 
-  <div *ngIf="loading">Loading...</div>
+  <div class="status ok" *ngIf="loading">
+    Chargement des enseignants...
+  </div>
 
-  <table border="1" width="100%">
-    <tr>
-      <th>Nom</th>
-      <th>Prénom</th>
-      <th>Email</th>
-      <th>Grade</th>
-      <th>Spécialité</th>
-      <th>Actions</th>
-    </tr>
+  <div class="table-responsive" *ngIf="!loading && enseignants.length">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Prenom</th>
+          <th>Email</th>
+          <th>Grade</th>
+          <th>Specialite</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of enseignants">
+          <td><strong>{{ e.nom }}</strong></td>
+          <td>{{ e.prenom }}</td>
+          <td><a [href]="'mailto:' + e.email">{{ e.email }}</a></td>
+          <td><span class="badge bg-info">{{ e.grade || '-' }}</span></td>
+          <td>{{ e.specialite || '-' }}</td>
+          <td>
+            <div class="actions-row !mt-0">
+              <button class="btn-light btn-sm" type="button" (click)="edit(e.id)">Modifier</button>
+              <button class="btn-danger btn-sm" type="button" (click)="delete(e.id)">Supprimer</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-    <tr *ngFor="let e of enseignants">
-      <td>{{ e.nom }}</td>
-      <td>{{ e.prenom }}</td>
-      <td>{{ e.email }}</td>
-      <td>{{ e.grade }}</td>
-      <td>{{ e.specialite }}</td>
-      <td>
-        <button (click)="edit(e.id)">Edit</button>
-        <button (click)="delete(e.id)">Delete</button>
-      </td>
-    </tr>
-  </table>
-</div>
+  <p class="status ok" *ngIf="!loading && !enseignants.length">Aucun enseignant disponible.</p>
+</section>

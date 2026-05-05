@@ -25,6 +25,10 @@ export class ResultatsService extends ApiBaseService {
     return this.http.get<Resultat>(`${this.apiUrl}/resultats/etudiant/${etudiantId}`);
   }
 
+  findMe(): Observable<Resultat> {
+    return this.http.get<Resultat>(`${this.apiUrl}/resultats/me`);
+  }
+
   calculate(soutenanceId: number, etudiantId: number): Observable<Resultat> {
     return this.http.post<Resultat>(`${this.apiUrl}/resultats/calculate`, null, {
       params: {

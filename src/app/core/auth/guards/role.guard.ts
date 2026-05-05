@@ -6,14 +6,18 @@ function toRoleList(roles: string | readonly string[]): readonly string[] {
   return Array.isArray(roles) ? roles : [roles];
 }
 
-function unauthorizedTree(router: Router) {
+function loginTree(router: Router) {
   return router.createUrlTree(['/login']);
+}
+
+function unauthorizedTree(router: Router) {
+  return router.createUrlTree(['/unauthorized']);
 }
 
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  return authService.isAuthenticated() ? true : unauthorizedTree(router);
+  return authService.isAuthenticated() ? true : loginTree(router);
 };
 
 export const roleGuard: CanActivateFn = (route) => {
@@ -21,7 +25,7 @@ export const roleGuard: CanActivateFn = (route) => {
   const router = inject(Router);
 
   if (!authService.isAuthenticated()) {
-    return unauthorizedTree(router);
+    return loginTree(router);
   }
 
   const rolesFromData = route.data?.['roles'];
@@ -36,7 +40,10 @@ export function requireRoleGuard(role: string): CanActivateFn {
   return () => {
     const authService = inject(AuthService);
     const router = inject(Router);
-    return authService.isAuthenticated() && authService.hasRole(role) ? true : unauthorizedTree(router);
+    if (!authService.isAuthenticated()) {
+      return loginTree(router);
+    }
+    return authService.hasRole(role) ? true : unauthorizedTree(router);
   };
 }
 
@@ -44,7 +51,10 @@ export function requireAnyRoleGuard(roles: readonly string[]): CanActivateFn {
   return () => {
     const authService = inject(AuthService);
     const router = inject(Router);
-    return authService.isAuthenticated() && authService.hasAnyRole(roles) ? true : unauthorizedTree(router);
+    if (!authService.isAuthenticated()) {
+      return loginTree(router);
+    }
+    return authService.hasAnyRole(roles) ? true : unauthorizedTree(router);
   };
 }
 

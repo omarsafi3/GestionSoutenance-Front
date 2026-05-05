@@ -5,6 +5,7 @@ import { Encadrant, Note, RoleJury, Soutenance } from '../../../core/models/doma
 import { EncadrantsService } from '../../../core/services/encadrants.service';
 import { NotesService } from '../../../core/services/notes.service';
 import { SoutenancesService } from '../../../core/services/soutenances.service';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-notes-page',
@@ -20,23 +21,29 @@ import { SoutenancesService } from '../../../core/services/soutenances.service';
       <h2>{{ editingId ? 'Modifier une note' : 'Ajouter une note' }}</h2>
       <form (ngSubmit)="save()" class="form-grid">
         <label>Soutenance
-          <select name="soutenanceId" [(ngModel)]="form.soutenanceId" required>
+          <select name="soutenanceId" [(ngModel)]="form.soutenanceId" (ngModelChange)="onSoutenanceChange()" required>
             <option [ngValue]="0" disabled>Selectionner</option>
             <option *ngFor="let s of soutenances" [ngValue]="s.id">{{ s.titre }}</option>
           </select>
         </label>
 
-        <label>Evaluateur
+        <label *ngIf="isAdmin">Evaluateur
           <select name="evaluateurId" [(ngModel)]="form.evaluateurId" required>
             <option [ngValue]="0" disabled>Selectionner</option>
             <option *ngFor="let e of encadrants" [ngValue]="e.id">{{ e.nom }} {{ e.prenom }}</option>
           </select>
         </label>
+        <label *ngIf="!isAdmin">Evaluateur
+          <input [value]="'Vous-meme'" disabled />
+        </label>
 
-        <label>Role jury
+        <label *ngIf="isAdmin">Role jury
           <select name="roleJury" [(ngModel)]="form.roleJury" required>
             <option *ngFor="let role of roles" [ngValue]="role">{{ role }}</option>
           </select>
+        </label>
+        <label *ngIf="!isAdmin">Role jury
+          <input [value]="form.roleJury" disabled />
         </label>
 
         <label>Note expose<input type="number" name="noteExpose" min="0" max="20" step="0.1" [(ngModel)]="form.noteExpose" required /></label>
@@ -80,7 +87,9 @@ import { SoutenancesService } from '../../../core/services/soutenances.service';
             <td>{{ n.noteRapport }}</td>
             <td>{{ n.noteQuestions }}</td>
             <td>{{ n.moyenneEvaluateur || '-' }}</td>
-            <td><button class="btn-light" (click)="startEdit(n)">Modifier</button></td>
+            <td>
+              <button class="btn-light" *ngIf="canEditNote(n)" (click)="startEdit(n)">Modifier</button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -94,6 +103,7 @@ export class NotesPageComponent implements OnInit {
   private readonly notesService = inject(NotesService);
   private readonly soutenancesService = inject(SoutenancesService);
   private readonly encadrantsService = inject(EncadrantsService);
+  private readonly authService = inject(AuthService);
 
   soutenances: Soutenance[] = [];
   encadrants: Encadrant[] = [];
@@ -116,21 +126,40 @@ export class NotesPageComponent implements OnInit {
     commentaire: ''
   };
 
+  get isAdmin(): boolean {
+    return this.authService.hasRole('ADMIN');
+  }
+
+  get currentEnseignantId(): number | null {
+    return this.authService.getCurrentEnseignantId();
+  }
+
   ngOnInit(): void {
     this.soutenancesService.findAll().subscribe({
-      next: data => (this.soutenances = data),
+      next: data => {
+        this.soutenances = data;
+        if (!this.isAdmin) {
+          this.form.evaluateurId = this.currentEnseignantId ?? 0;
+        }
+      },
       error: err => this.setError(err)
     });
-    this.encadrantsService.findAll().subscribe({
-      next: data => (this.encadrants = data),
-      error: err => this.setError(err)
-    });
+    if (this.isAdmin) {
+      this.encadrantsService.findAll().subscribe({
+        next: data => (this.encadrants = data),
+        error: err => this.setError(err)
+      });
+    }
   }
 
   save(): void {
     if (!this.form.soutenanceId || !this.form.evaluateurId) {
       this.errorMessage = 'Soutenance et evaluateur sont obligatoires.';
       return;
+    }
+    if (!this.isAdmin) {
+      this.form.evaluateurId = this.currentEnseignantId ?? 0;
+      this.form.roleJury = this.roleForCurrentTeacher(this.selectedSoutenance()) ?? this.form.roleJury;
     }
 
     this.clearMessages();
@@ -158,12 +187,15 @@ export class NotesPageComponent implements OnInit {
 
     this.clearMessages();
     this.notesService.findBySoutenance(this.selectedSoutenanceId).subscribe({
-      next: data => (this.notes = data),
+      next: data => (this.notes = this.isAdmin ? data : data.filter(note => note.evaluateurId === this.currentEnseignantId)),
       error: err => this.setError(err)
     });
   }
 
   startEdit(note: Note): void {
+    if (!this.canEditNote(note)) {
+      return;
+    }
     this.editingId = note.id ?? null;
     this.form = {
       id: note.id,
@@ -180,13 +212,39 @@ export class NotesPageComponent implements OnInit {
   resetForm(): void {
     this.form = {
       soutenanceId: 0,
-      evaluateurId: 0,
+      evaluateurId: this.isAdmin ? 0 : this.currentEnseignantId ?? 0,
       roleJury: 'PRESIDENT',
       noteExpose: 0,
       noteRapport: 0,
       noteQuestions: 0,
       commentaire: ''
     };
+  }
+
+  onSoutenanceChange(): void {
+    if (!this.isAdmin) {
+      this.form.evaluateurId = this.currentEnseignantId ?? 0;
+      this.form.roleJury = this.roleForCurrentTeacher(this.selectedSoutenance()) ?? 'PRESIDENT';
+    }
+  }
+
+  canEditNote(note: Note): boolean {
+    return this.isAdmin || note.evaluateurId === this.currentEnseignantId;
+  }
+
+  private selectedSoutenance(): Soutenance | undefined {
+    return this.soutenances.find(s => s.id === this.form.soutenanceId);
+  }
+
+  private roleForCurrentTeacher(soutenance?: Soutenance): RoleJury | null {
+    const enseignantId = this.currentEnseignantId;
+    if (!soutenance || !enseignantId) {
+      return null;
+    }
+    if (soutenance.presidentId === enseignantId) return 'PRESIDENT';
+    if (soutenance.rapporteurId === enseignantId) return 'RAPPORTEUR';
+    if (soutenance.examinateurId === enseignantId) return 'EXAMINATEUR';
+    return null;
   }
 
   private clearMessages(): void {

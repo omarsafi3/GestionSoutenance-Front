@@ -1,13 +1,33 @@
-<h2>Form Enseignant</h2>
+<section class="page-header">
+  <h1>{{ id ? 'Modifier un enseignant' : 'Ajouter un enseignant' }}</h1>
+  <p>Profil enseignant utilise pour les affectations de jury.</p>
+</section>
 
-<form [formGroup]="form" (ngSubmit)="submit()">
+<section class="panel">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+    <label>Nom
+      <input formControlName="nom" placeholder="Nom">
+    </label>
 
-  <input placeholder="Nom" formControlName="nom">
-  <input placeholder="Prénom" formControlName="prenom">
-  <input placeholder="Email" formControlName="email">
-  <input placeholder="Grade" formControlName="grade">
-  <input placeholder="Spécialité" formControlName="specialite">
+    <label>Prenom
+      <input formControlName="prenom" placeholder="Prenom">
+    </label>
 
-  <button type="submit">Save</button>
+    <label>Email
+      <input formControlName="email" placeholder="email@exemple.com">
+    </label>
 
-</form>
+    <label>Grade
+      <input formControlName="grade" placeholder="Professeur">
+    </label>
+
+    <label>Specialite
+      <input formControlName="specialite" placeholder="Systemes distribues">
+    </label>
+
+    <div class="actions-row">
+      <button class="btn-primary" type="submit" [disabled]="form.invalid">Enregistrer</button>
+      <a class="btn-light" routerLink="/enseignants">Annuler</a>
+    </div>
+  </form>
+</section>

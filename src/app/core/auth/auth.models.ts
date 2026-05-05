@@ -17,6 +17,8 @@ export interface AuthResponse {
   refreshExpiresInMs: number;
   username: string;
   role: UserRole;
+  enseignantId?: number | null;
+  etudiantId?: number | null;
 }
 
 export interface AuthSession {
@@ -24,6 +26,8 @@ export interface AuthSession {
   refreshToken: string;
   username: string;
   role: UserRole;
+  enseignantId?: number | null;
+  etudiantId?: number | null;
   accessTokenExpiresAt: number;
   refreshTokenExpiresAt: number;
 }

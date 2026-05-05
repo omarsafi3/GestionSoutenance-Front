@@ -11,7 +11,13 @@ import { AuthService } from './auth.service';
   template: `
     <section class="auth-shell">
       <form class="auth-panel" (ngSubmit)="login()">
-        <h1>Connexion</h1>
+        <div class="auth-brand">
+          <span>GS</span>
+          <div>
+            <h1>Connexion</h1>
+            <p>Gestion des soutenances</p>
+          </div>
+        </div>
         <label>Nom utilisateur
           <input name="username" [(ngModel)]="username" required autocomplete="username">
         </label>
@@ -24,10 +30,59 @@ import { AuthService } from './auth.service';
     </section>
   `,
   styles: [`
-    .auth-shell { min-height: 60vh; display: grid; place-items: center; }
-    .auth-panel { width: min(420px, 92vw); display: grid; gap: 1rem; padding: 2rem; background: #fff; border: 1px solid #dee2e6; border-radius: .5rem; }
-    .auth-panel label { display: grid; gap: .35rem; font-weight: 600; }
-    .auth-panel input { padding: .65rem .75rem; border: 1px solid #ced4da; border-radius: .375rem; }
+    .auth-shell {
+      min-height: 68vh;
+      display: grid;
+      place-items: center;
+      padding: 24px 0;
+    }
+    .auth-panel {
+      position: relative;
+      width: min(460px, 94vw);
+      display: grid;
+      gap: 1rem;
+      overflow: hidden;
+      padding: 2rem;
+      border: 1px solid rgba(255,255,255,.72);
+      border-radius: 14px;
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 26px 70px rgba(23,32,51,.16);
+      backdrop-filter: blur(18px);
+    }
+    .auth-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 5px;
+      background: linear-gradient(90deg, #0f766e, #f6b642, #e35d4f);
+    }
+    .auth-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+    .auth-brand span {
+      display: grid;
+      width: 52px;
+      height: 52px;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0f766e, #e35d4f);
+      color: #fff;
+      font-weight: 950;
+      box-shadow: 0 18px 38px rgba(15,118,110,.22);
+    }
+    .auth-brand h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+    .auth-brand p {
+      margin: 2px 0 0;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 800;
+    }
   `]
 })
 export class LoginPageComponent {
@@ -48,7 +103,7 @@ export class LoginPageComponent {
     this.authService.login({ username: this.username, password: this.password }).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/etudiants']);
+        this.router.navigate(['/']);
       },
       error: (err) => {
         this.loading = false;

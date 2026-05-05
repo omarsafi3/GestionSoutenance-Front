@@ -4,6 +4,26 @@ import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import {
+  Award,
+  Building2,
+  CalendarDays,
+  ClipboardList,
+  ExternalLink,
+  FileText,
+  GraduationCap,
+  Home,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+  Menu,
+  ShieldCheck,
+  UserCircle,
+  UserRoundCog,
+  Users,
+  X,
+  LucideAngularModule
+} from 'lucide-angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -43,6 +63,25 @@ import { SoutenanceFormComponent } from './features/soutenances/soutenance-form/
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    LucideAngularModule.pick({
+      Award,
+      Building2,
+      CalendarDays,
+      ClipboardList,
+      ExternalLink,
+      FileText,
+      GraduationCap,
+      Home,
+      LayoutDashboard,
+      LogIn,
+      LogOut,
+      Menu,
+      ShieldCheck,
+      UserCircle,
+      UserRoundCog,
+      Users,
+      X
+    }),
     AppRoutingModule
   ],
   providers: [

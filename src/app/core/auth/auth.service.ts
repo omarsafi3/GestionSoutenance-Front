@@ -66,6 +66,14 @@ export class AuthService {
     };
   }
 
+  getCurrentEnseignantId(): number | null {
+    return this.sessionSubject.value?.enseignantId ?? null;
+  }
+
+  getCurrentEtudiantId(): number | null {
+    return this.sessionSubject.value?.etudiantId ?? null;
+  }
+
   isAuthenticated(): boolean {
     const session = this.sessionSubject.value;
     return !!session && session.accessTokenExpiresAt > Date.now();
@@ -87,6 +95,8 @@ export class AuthService {
       refreshToken: response.refreshToken,
       username: response.username,
       role: response.role,
+      enseignantId: response.enseignantId ?? null,
+      etudiantId: response.etudiantId ?? null,
       accessTokenExpiresAt: now + response.expiresInMs,
       refreshTokenExpiresAt: now + response.refreshExpiresInMs
     };

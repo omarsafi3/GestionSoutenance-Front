@@ -1,20 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Encadrant } from '../models/encadrant';
-import { environment } from '../../environments/environment';
+import { EncadrantsService } from '../core/services/encadrants.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EncadrantService {
-  private readonly apiUrl = `${environment.apiUrl}/encadrants`;
   private encadrants$ = new BehaviorSubject<Encadrant[]>([]);
   private loading$ = new BehaviorSubject<boolean>(false);
   private error$ = new BehaviorSubject<string | null>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly api: EncadrantsService) {}
 
   private extractErrorMessage(err: any, fallback: string): string {
     const backendMessage =
@@ -41,7 +39,7 @@ export class EncadrantService {
     this.loading$.next(true);
     this.error$.next(null);
 
-    return this.http.get<Encadrant[]>(this.apiUrl).pipe(
+    return this.api.findAll().pipe(
       tap((data) => {
         this.encadrants$.next(data);
         this.loading$.next(false);
@@ -59,7 +57,7 @@ export class EncadrantService {
     this.loading$.next(true);
     this.error$.next(null);
 
-    return this.http.get<Encadrant>(`${this.apiUrl}/${id}`).pipe(
+    return this.api.findById(id).pipe(
       tap(() => this.loading$.next(false)),
       catchError((err) => {
         const errorMsg = this.extractErrorMessage(err, 'Erreur lors du chargement de l encadrant');
@@ -71,7 +69,8 @@ export class EncadrantService {
   }
 
   exists(id: number): Observable<boolean> {
-    return this.http.get<boolean>(`${this.apiUrl}/exists/${id}`).pipe(
+    return this.api.findById(id).pipe(
+      map(() => true),
       catchError((err) => {
         const errorMsg = this.extractErrorMessage(err, 'Erreur lors de la verification de l encadrant');
         this.error$.next(errorMsg);
@@ -84,7 +83,7 @@ export class EncadrantService {
     this.loading$.next(true);
     this.error$.next(null);
 
-    return this.http.post<Encadrant>(this.apiUrl, encadrant).pipe(
+    return this.api.create(encadrant).pipe(
       tap((newEncadrant) => {
         const current = this.encadrants$.value;
         this.encadrants$.next([...current, newEncadrant]);
@@ -103,7 +102,7 @@ export class EncadrantService {
     this.loading$.next(true);
     this.error$.next(null);
 
-    return this.http.put<Encadrant>(`${this.apiUrl}/${id}`, encadrant).pipe(
+    return this.api.update(id, encadrant).pipe(
       tap((updatedEncadrant) => {
         const current = this.encadrants$.value;
         const index = current.findIndex((e) => e.id === id);
@@ -126,7 +125,7 @@ export class EncadrantService {
     this.loading$.next(true);
     this.error$.next(null);
 
-    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+    return this.api.delete(id).pipe(
       tap(() => {
         const current = this.encadrants$.value;
         this.encadrants$.next(current.filter((e) => e.id !== id));
