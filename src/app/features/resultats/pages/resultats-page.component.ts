@@ -60,9 +60,6 @@ import { AuthService } from '../../../core/auth/auth.service';
               <button class="btn-light" type="button" *ngIf="resultat.id && resultat.valide && !resultat.publie" (click)="publish(resultat)">
                 Publier
               </button>
-              <button class="btn-light" type="button" *ngIf="resultat.soutenanceId && !resultat.valide && !resultat.publie" (click)="calculate(resultat.soutenanceId)">
-                Recalculer
-              </button>
             </td>
           </tr>
         </tbody>
