@@ -63,7 +63,7 @@
       </nav>
     </ng-template>
 
-    <div class="session-area" *ngIf="isAuthenticated(); else loginAction">
+    <div class="session-area" *ngIf="isAuthenticated()">
       <span class="session-pill" title="Session active">
         <lucide-icon name="user-circle" [size]="18"></lucide-icon>
         <span>{{ state.session?.username }}</span>
@@ -75,12 +75,7 @@
       </button>
     </div>
 
-    <ng-template #loginAction>
-      <a class="login-action" [routerLink]="['/login']">
-        <lucide-icon name="log-in" [size]="18"></lucide-icon>
-        Connexion
-      </a>
-    </ng-template>
+    
   </header>
 
   <main class="main-content">
