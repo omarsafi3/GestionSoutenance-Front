@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Encadrant } from '../models/domain.models';
 import { ApiBaseService } from './api-base.service';
@@ -9,6 +10,11 @@ type EncadrantPayload = Pick<Encadrant, 'nom' | 'prenom' | 'email'> & Partial<Pi
 export class EncadrantsService extends ApiBaseService {
   findAll(): Observable<Encadrant[]> {
     return this.http.get<Encadrant[]>(`${this.apiUrl}/encadrants`);
+  }
+
+  findAvailableForJury(etudiantId: number): Observable<Encadrant[]> {
+    const params = new HttpParams().set('etudiantId', etudiantId.toString());
+    return this.http.get<Encadrant[]>(`${this.apiUrl}/encadrants/jury/available`, { params });
   }
 
   findById(id: number): Observable<Encadrant> {

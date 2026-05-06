@@ -9,6 +9,7 @@ import { EncadrantsService } from '../../core/services/encadrants.service';
 })
 export class EnseignantService {
   private enseignants$ = new BehaviorSubject<Enseignant[]>([]);
+  private juryEnseignants$ = new BehaviorSubject<Enseignant[]>([]);
   private loading$ = new BehaviorSubject<boolean>(false);
   private error$ = new BehaviorSubject<string | null>(null);
 
@@ -16,6 +17,10 @@ export class EnseignantService {
 
   getEnseignants(): Observable<Enseignant[]> {
     return this.enseignants$.asObservable();
+  }
+
+  getJuryEnseignants(): Observable<Enseignant[]> {
+    return this.juryEnseignants$.asObservable();
   }
 
   getLoading(): Observable<boolean> {
@@ -37,6 +42,22 @@ export class EnseignantService {
       catchError(err => {
         this.loading$.next(false);
         this.error$.next('Erreur chargement enseignants');
+        return throwError(() => err);
+      })
+    );
+  }
+
+  loadAvailableForJury(etudiantId: number): Observable<Enseignant[]> {
+    this.loading$.next(true);
+
+    return this.api.findAvailableForJury(etudiantId).pipe(
+      tap(data => {
+        this.juryEnseignants$.next(data);
+        this.loading$.next(false);
+      }),
+      catchError(err => {
+        this.loading$.next(false);
+        this.error$.next('Erreur chargement enseignants disponibles');
         return throwError(() => err);
       })
     );

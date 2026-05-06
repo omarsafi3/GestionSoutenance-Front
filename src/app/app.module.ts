@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import {
   Award,
   ArrowLeft,
+  Bot,
   BriefcaseBusiness,
   Building2,
   CalendarDays,
@@ -28,6 +29,7 @@ import {
   Pencil,
   RotateCw,
   School,
+  Send,
   ShieldCheck,
   Trash2,
   TriangleAlert,
@@ -53,6 +55,7 @@ import { SalleListComponent } from './features/salles/salle-list/salle-list.comp
 import { SalleFormComponent } from './features/salles/salle-form/salle-form.component';
 import { SoutenanceListComponent } from './features/soutenances/soutenance-list/soutenance-list.component';
 import { SoutenanceFormComponent } from './features/soutenances/soutenance-form/soutenance-form.component';
+import { ChatbotAssistantComponent } from './core/chatbot/chatbot-assistant.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -67,7 +70,8 @@ import { SoutenanceFormComponent } from './features/soutenances/soutenance-form/
     SalleListComponent,
     SalleFormComponent,
     SoutenanceListComponent,
-    SoutenanceFormComponent
+    SoutenanceFormComponent,
+    ChatbotAssistantComponent
   ],
   imports: [
     BrowserModule,
@@ -79,6 +83,7 @@ import { SoutenanceFormComponent } from './features/soutenances/soutenance-form/
     LucideAngularModule.pick({
       Award,
       ArrowLeft,
+      Bot,
       BriefcaseBusiness,
       Building2,
       CalendarDays,
@@ -100,6 +105,7 @@ import { SoutenanceFormComponent } from './features/soutenances/soutenance-form/
       Pencil,
       RotateCw,
       School,
+      Send,
       ShieldCheck,
       Trash2,
       TriangleAlert,

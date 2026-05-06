@@ -70,12 +70,26 @@ export class SoutenanceFormComponent implements OnInit {
         if (this.isFinished) {
           this.form.disable();
         }
+        // Load jury enseignants for this student
+        const etudiantId = Number(data.etudiantId);
+        if (etudiantId) {
+          this.loadJuryForStudent(etudiantId);
+        }
       });
     }
-    this.enseignantService.loadAll().subscribe();
-    this.enseignantService.getEnseignants().subscribe(data => {
+
+    // Watch for etudiantId changes to reload jury enseignants
+    this.form.get('etudiantId')?.valueChanges.subscribe(etudiantId => {
+      if (etudiantId) {
+        this.loadJuryForStudent(Number(etudiantId));
+      }
+    });
+
+    // Subscribe to jury enseignants
+    this.enseignantService.getJuryEnseignants().subscribe(data => {
       this.enseignants = data;
     });
+
     this.salleService.loadAll().subscribe();
     this.salleService.getSalles().subscribe(data => {
       this.salles = data;
@@ -88,6 +102,10 @@ export class SoutenanceFormComponent implements OnInit {
     this.service.getSoutenances().subscribe(data => {
       this.soutenances = data;
     });
+  }
+
+  private loadJuryForStudent(etudiantId: number): void {
+    this.enseignantService.loadAvailableForJury(etudiantId).subscribe();
   }
 
   submit(): void {
@@ -106,6 +124,7 @@ export class SoutenanceFormComponent implements OnInit {
 
   const payload = {
     ...v,
+    statut: this.id ? v.statut : 'PLANIFIEE',
 
     // FIX 1: LocalDateTime format
     date: v.date.length === 16 ? v.date + ':00' : v.date,

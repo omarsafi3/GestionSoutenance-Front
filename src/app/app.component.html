@@ -86,4 +86,6 @@
   <main class="main-content">
     <router-outlet></router-outlet>
   </main>
+
+  <app-chatbot-assistant *ngIf="state.session"></app-chatbot-assistant>
 </div>

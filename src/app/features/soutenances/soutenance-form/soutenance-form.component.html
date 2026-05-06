@@ -22,16 +22,6 @@
       <span class="invalid-feedback" *ngIf="isFieldInvalid('duree')">{{ getFieldError('duree') }}</span>
     </label>
 
-    <label>Statut
-      <select formControlName="statut">
-        <option value="">Selectionner statut</option>
-        <option value="PLANIFIEE">PLANIFIEE</option>
-        <option value="EN_COURS">EN_COURS</option>
-        <option value="TERMINEE">TERMINEE</option>
-        <option value="ANNULEE">ANNULEE</option>
-      </select>
-    </label>
-
     <label>President
       <select formControlName="presidentId">
         <option value="">President</option>

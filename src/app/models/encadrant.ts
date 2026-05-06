@@ -7,3 +7,4 @@ export interface Encadrant {
   specialite: string;
   password?: string;
 }
+
