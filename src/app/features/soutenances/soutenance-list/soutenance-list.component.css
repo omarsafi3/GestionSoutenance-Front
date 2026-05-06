@@ -1,3 +1,90 @@
 :host {
   display: block;
 }
+
+.details-panel {
+  margin-top: 1.5rem;
+}
+
+.details-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.details-heading h2 {
+  margin: 0.25rem 0;
+  color: #16213a;
+  font-size: 1.65rem;
+}
+
+.details-heading p,
+.muted {
+  color: #64748b;
+}
+
+.eyebrow {
+  display: inline-flex;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  color: #0f4a8a;
+  background: #eff6ff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.detail-block {
+  border: 1px solid #dbe7f6;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.detail-block h3,
+.notes-table h3 {
+  margin: 0 0 1rem;
+  color: #17213a;
+  font-size: 1rem;
+}
+
+.detail-block dl {
+  display: grid;
+  gap: 0.8rem;
+  margin: 0;
+}
+
+.detail-block dt {
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.detail-block dd {
+  margin: 0.15rem 0 0;
+  color: #22314d;
+  font-weight: 700;
+}
+
+.notes-table {
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .details-heading {
+    flex-direction: column;
+  }
+}

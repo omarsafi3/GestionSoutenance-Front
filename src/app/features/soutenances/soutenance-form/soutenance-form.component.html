@@ -63,8 +63,11 @@
     <label>Etudiant
       <select formControlName="etudiantId">
         <option value="">Etudiant</option>
-        <option *ngFor="let et of etudiants" [value]="et.id">{{ et.nom }} {{ et.prenom }}</option>
+        <option *ngFor="let et of etudiantsDisponibles" [value]="et.id">{{ et.nom }} {{ et.prenom }}</option>
       </select>
+      <span class="invalid-feedback" *ngIf="!id && !etudiantsDisponibles.length">
+        Tous les etudiants ont deja une soutenance. Ajoutez un nouvel etudiant avant de planifier.
+      </span>
     </label>
 
     <div class="actions-row">

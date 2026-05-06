@@ -38,10 +38,6 @@
           Modules
         </button>
         <div class="nav-menu-panel" [class.is-open]="modulesOpen">
-          <a *ngIf="canAccess(['ADMIN'])" [routerLink]="['/jurys']" routerLinkActive="active">
-            <lucide-icon name="shield-check" [size]="17"></lucide-icon>
-            Jurys
-          </a>
           <a *ngIf="canAccess(['ADMIN', 'ENSEIGNANT'])" [routerLink]="['/notes']" routerLinkActive="active">
             <lucide-icon name="file-text" [size]="17"></lucide-icon>
             Notes

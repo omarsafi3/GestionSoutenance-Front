@@ -8,6 +8,7 @@ import { Etudiant } from '../../../models/etudiant';
 import { EnseignantService } from '../../enseignant/enseignant.service';
 import { SalleService } from '../../salles/salle.service';
 import { EtudiantService } from '../../../services/etudiant.service';
+import { Soutenance } from '../../../core/models/domain.models';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class SoutenanceFormComponent implements OnInit {
   enseignants: Enseignant[] = [];
   salles: Salle[] = [];
   etudiants: Etudiant[] = [];
+  soutenances: Soutenance[] = [];
   submitted = false;
   loading = false;
   errorMessage = '';
@@ -82,6 +84,10 @@ export class SoutenanceFormComponent implements OnInit {
     this.etudiantService.getEtudiants().subscribe(data => {
       this.etudiants = data;
     });
+    this.service.loadAll().subscribe();
+    this.service.getSoutenances().subscribe(data => {
+      this.soutenances = data;
+    });
   }
 
   submit(): void {
@@ -138,5 +144,19 @@ export class SoutenanceFormComponent implements OnInit {
     if (ctrl.errors['required']) return `${field} est obligatoire`;
     if (ctrl.errors['min']) return 'Valeur invalide';
     return 'Valeur invalide';
+  }
+
+  get etudiantsDisponibles(): Etudiant[] {
+    const currentEtudiantId = Number(this.form?.get('etudiantId')?.value);
+    const assignedIds = new Set(
+      this.soutenances
+        .filter(s => !this.id || s.id !== this.id)
+        .map(s => s.etudiantId)
+        .filter((id): id is number => id != null)
+    );
+
+    return this.etudiants.filter(etudiant =>
+      etudiant.id != null && (!assignedIds.has(etudiant.id) || etudiant.id === currentEtudiantId)
+    );
   }
 }

@@ -22,7 +22,7 @@
           <th>Date</th>
           <th>Duree</th>
           <th>Statut</th>
-          <th *ngIf="isAdmin">Actions</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -35,10 +35,13 @@
               {{ s.statut }}
             </span>
           </td>
-          <td *ngIf="isAdmin">
+          <td>
             <div class="actions-row !mt-0">
-              <button class="btn-light btn-sm" type="button" (click)="edit(s.id)">Modifier</button>
-              <button class="btn-danger btn-sm" type="button" (click)="delete(s.id)">Supprimer</button>
+              <button class="btn-light btn-sm" type="button" (click)="viewDetails(s)">
+                {{ selected?.id === s.id ? 'Masquer' : 'Voir details' }}
+              </button>
+              <button class="btn-light btn-sm" type="button" *ngIf="canEdit(s)" (click)="edit(s.id)">Modifier</button>
+              <button class="btn-danger btn-sm" type="button" *ngIf="isAdmin" (click)="delete(s.id)">Supprimer</button>
             </div>
           </td>
         </tr>
@@ -47,4 +50,115 @@
   </div>
 
   <p class="status ok" *ngIf="!loading && !soutenances.length">Aucune soutenance disponible.</p>
+</section>
+
+<section class="panel details-panel" *ngIf="selected">
+  <div class="details-heading">
+    <div>
+      <span class="eyebrow">Fiche soutenance</span>
+      <h2>{{ selected.titre }}</h2>
+      <p>{{ selected.date | date:'full' }} · {{ selected.duree }} min</p>
+    </div>
+    <button class="btn-light btn-sm" type="button" (click)="closeDetails()">Fermer</button>
+  </div>
+
+  <div class="status ok" *ngIf="detailsLoading">Chargement des details...</div>
+
+  <div class="details-grid" *ngIf="!detailsLoading">
+    <article class="detail-block">
+      <h3>Planning</h3>
+      <dl>
+        <div>
+          <dt>Statut</dt>
+          <dd><span class="badge" [ngClass]="statusClass(selected.statut)">{{ selected.statut }}</span></dd>
+        </div>
+        <div>
+          <dt>Etudiant</dt>
+          <dd>{{ selected.etudiantPrenom || '' }} {{ selected.etudiantNom || ('Etudiant #' + selected.etudiantId) }}</dd>
+        </div>
+        <div>
+          <dt>Salle</dt>
+          <dd>{{ selected.salleId ? 'Salle #' + selected.salleId : '-' }}</dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="detail-block">
+      <h3>Jury</h3>
+      <dl>
+        <div>
+          <dt>President</dt>
+          <dd>{{ juryLabel('PRESIDENT') }}</dd>
+        </div>
+        <div>
+          <dt>Rapporteur</dt>
+          <dd>{{ juryLabel('RAPPORTEUR') }}</dd>
+        </div>
+        <div>
+          <dt>Examinateur</dt>
+          <dd>{{ juryLabel('EXAMINATEUR') }}</dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="detail-block result-block">
+      <h3>Resultat</h3>
+      <dl *ngIf="selectedResultat; else noResultat">
+        <div>
+          <dt>Moyenne finale</dt>
+          <dd>{{ selectedResultat.moyenneFinale | number:'1.2-2' }}</dd>
+        </div>
+        <div>
+          <dt>Mention</dt>
+          <dd>{{ selectedResultat.mention || '-' }}</dd>
+        </div>
+        <div>
+          <dt>Decision</dt>
+          <dd>{{ selectedResultat.decisionFinale || '-' }}</dd>
+        </div>
+        <div>
+          <dt>Validation</dt>
+          <dd>{{ selectedResultat.valide ? 'Valide' : 'En attente' }}</dd>
+        </div>
+        <div>
+          <dt>Publication</dt>
+          <dd>{{ selectedResultat.publie ? 'Publie' : 'Non publie' }}</dd>
+        </div>
+      </dl>
+      <ng-template #noResultat>
+        <p class="muted">Aucun resultat calcule.</p>
+      </ng-template>
+    </article>
+  </div>
+
+  <div class="notes-table" *ngIf="!detailsLoading">
+    <h3>Notes du jury</h3>
+    <table class="data-table" *ngIf="selectedNotes.length; else noNotes">
+      <thead>
+        <tr>
+          <th>Evaluateur</th>
+          <th>Role</th>
+          <th>Expose</th>
+          <th>Rapport</th>
+          <th>Questions</th>
+          <th>Moyenne</th>
+          <th>Commentaire</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let note of selectedNotes">
+          <td>{{ note.evaluateurNom || ('Enseignant #' + note.evaluateurId) }}</td>
+          <td>{{ note.roleJury }}</td>
+          <td>{{ note.noteExpose | number:'1.2-2' }}</td>
+          <td>{{ note.noteRapport | number:'1.2-2' }}</td>
+          <td>{{ note.noteQuestions | number:'1.2-2' }}</td>
+          <td>{{ note.moyenneEvaluateur | number:'1.2-2' }}</td>
+          <td>{{ note.commentaire || '-' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noNotes>
+      <p class="muted">Aucune note saisie.</p>
+    </ng-template>
+  </div>
 </section>

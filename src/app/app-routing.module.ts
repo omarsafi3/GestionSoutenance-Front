@@ -7,7 +7,6 @@ import { DetailComponent } from './etudiants/detail/detail.component';
 import { EncadrantsListComponent } from './encadrants/list/list.component';
 import { EncadrantsFormComponent } from './encadrants/form/form.component';
 import { EncadrantsDetailComponent } from './encadrants/detail/detail.component';
-import { JurysPageComponent } from './features/jurys/pages/jurys-page.component';
 import { NotesPageComponent } from './features/notes/pages/notes-page.component';
 import { LoginPageComponent } from './core/auth/login-page.component';
 import { roleGuard } from './core/auth/guards/role.guard';
@@ -33,7 +32,6 @@ const routes: Routes = [
   { path: 'encadrants/add', component: EncadrantsFormComponent, canActivate: [roleGuard], data: { title: 'Ajouter un encadrant', roles: ['ADMIN'] } },
   { path: 'encadrants/edit/:id', component: EncadrantsFormComponent, canActivate: [roleGuard], data: { title: 'Modifier encadrant', roles: ['ADMIN'] } },
   { path: 'encadrants/:id', component: EncadrantsDetailComponent, canActivate: [roleGuard], data: { title: 'Detail encadrant', roles: ['ADMIN'] } },
-  { path: 'jurys', component: JurysPageComponent, canActivate: [roleGuard], data: { title: 'Gestion des jurys', roles: ['ADMIN'] } },
   { path: 'notes', component: NotesPageComponent, canActivate: [roleGuard], data: { title: 'Gestion des notes', roles: ['ADMIN', 'ENSEIGNANT'] } },
   { path: 'enseignants', component: EnseignantListComponent, canActivate: [roleGuard], data: { title: 'Liste des enseignants', roles: ['ADMIN'] } },
   { path: 'enseignants/add', component: EnseignantFormComponent, canActivate: [roleGuard], data: { title: 'Ajouter enseignant', roles: ['ADMIN'] } },

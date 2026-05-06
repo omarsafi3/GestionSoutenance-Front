@@ -1,0 +1,40 @@
+
+> gestion-soutenance-front@0.0.0 start
+> ng serve
+
+Initial chunk files | Names         |  Raw size
+main.js             | main          | 310.09 kB | 
+polyfills.js        | polyfills     |  88.09 kB | 
+styles.css          | styles        |  37.51 kB | 
+
+                    | Initial total | 435.68 kB
+
+Application bundle generation complete. [9.343 seconds]
+
+Watch mode enabled. Watching for file changes...
+  ➜  Local:   http://localhost:4200/
+  ➜  press h + enter to show help
+Initial chunk files | Names |  Raw size
+main.js             | main  | 310.63 kB | 
+
+Application bundle generation complete. [2.355 seconds]
+
+Page reload sent to client(s).
+Initial chunk files | Names |  Raw size
+main.js             | main  | 311.18 kB | 
+
+Application bundle generation complete. [0.718 seconds]
+
+Page reload sent to client(s).
+Initial chunk files | Names |  Raw size
+main.js             | main  | 292.85 kB | 
+
+Application bundle generation complete. [1.202 seconds]
+
+Page reload sent to client(s).
+Initial chunk files | Names |  Raw size
+main.js             | main  | 292.18 kB | 
+
+Application bundle generation complete. [0.746 seconds]
+
+Page reload sent to client(s).
