@@ -39,7 +39,7 @@ export class DetailComponent implements OnInit, OnDestroy {
       });
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (!id) {
-      this.errorMessage = 'Identifiant étudiant invalide.';
+      this.errorMessage = 'Identifiant etudiant invalide.';
       return;
     }
 
@@ -51,7 +51,7 @@ export class DetailComponent implements OnInit, OnDestroy {
           this.errorMessage = '';
         },
         error: () => {
-          this.errorMessage = 'Impossible de charger les détails de l étudiant.';
+          this.errorMessage = 'Impossible de charger les details de l etudiant.';
         }
       });
   }

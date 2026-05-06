@@ -87,8 +87,13 @@ export class SoutenanceListComponent implements OnInit {
       RAPPORTEUR: soutenance.rapporteurId,
       EXAMINATEUR: soutenance.examinateurId
     };
+    const nameByRole = {
+      PRESIDENT: soutenance.presidentNom,
+      RAPPORTEUR: soutenance.rapporteurNom,
+      EXAMINATEUR: soutenance.examinateurNom
+    };
     const note = this.selectedNotes.find(item => item.roleJury === role);
-    return note?.evaluateurNom || (idByRole[role] ? `Enseignant #${idByRole[role]}` : '-');
+    return nameByRole[role] || note?.evaluateurNom || (idByRole[role] ? `Enseignant #${idByRole[role]}` : '-');
   }
 
   statusClass(status?: string): string {

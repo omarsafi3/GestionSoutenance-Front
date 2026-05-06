@@ -1,69 +1,73 @@
-<div class="container py-4 detail-page">
-  <div class="d-flex justify-content-between align-items-center mb-4 detail-header">
-    <div>
-      <span class="header-chip">Fiche étudiant</span>
-      <h2 class="mb-0 mt-2">Détails étudiant</h2>
-    </div>
-    <button class="btn btn-outline-secondary" (click)="goToList()">
-      <i class="bi bi-arrow-left"></i> Retour à la liste
+<section class="page-header">
+  <div>
+    <h1>Details etudiant</h1>
+    <p>Fiche profil, parcours et encadrant rattache.</p>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="actions-row !mt-0 !mb-4">
+    <button class="btn-light" type="button" (click)="goToList()">
+      <lucide-icon name="arrow-left" [size]="18"></lucide-icon>
+      Retour
+    </button>
+    <button class="btn-primary" type="button" *ngIf="etudiant" (click)="goToEdit()">
+      Modifier
     </button>
   </div>
 
-  <div class="text-center py-5" *ngIf="loading">
-    <div class="spinner-border text-primary"></div>
-    <p class="text-muted mt-3">Chargement des détails...</p>
+  <div class="status ok" *ngIf="loading">
+    <span class="spinner-border"></span>
+    Chargement des details...
   </div>
 
-  <div class="alert alert-danger" *ngIf="!loading && errorMessage">
-    {{ errorMessage }}
+  <p class="status err" *ngIf="!loading && errorMessage">{{ errorMessage }}</p>
+
+  <div class="details-grid" *ngIf="!loading && etudiant">
+    <article class="detail-block">
+      <h3>Identite</h3>
+      <dl>
+        <div>
+          <dt>Nom</dt>
+          <dd>{{ etudiant.nom }}</dd>
+        </div>
+        <div>
+          <dt>Prenom</dt>
+          <dd>{{ etudiant.prenom }}</dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd><a [href]="'mailto:' + etudiant.email">{{ etudiant.email }}</a></dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="detail-block">
+      <h3>Parcours</h3>
+      <dl>
+        <div>
+          <dt>Matricule</dt>
+          <dd>{{ etudiant.matricule }}</dd>
+        </div>
+        <div>
+          <dt>Filiere</dt>
+          <dd>{{ etudiant.filiere }}</dd>
+        </div>
+        <div>
+          <dt>Niveau</dt>
+          <dd>{{ etudiant.niveau }}</dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="detail-block">
+      <h3>Encadrement</h3>
+      <dl>
+        <div>
+          <dt>Encadrant</dt>
+          <dd>{{ encadrantLabel(etudiant.encadrantId) }}</dd>
+        </div>
+      </dl>
+    </article>
   </div>
-
-  <div class="card shadow-sm detail-card" *ngIf="!loading && etudiant">
-    <div class="card-body">
-      <div class="row g-3">
-
-        <div class="col-md-6">
-          <p class="text-muted mb-1">Nom</p>
-          <p class="fw-semibold">{{ etudiant.nom }}</p>
-        </div>
-
-        <div class="col-md-6">
-          <p class="text-muted mb-1">Prénom</p>
-          <p class="fw-semibold">{{ etudiant.prenom }}</p>
-        </div>
-
-        <div class="col-md-6">
-          <p class="text-muted mb-1">Email</p>
-          <p class="fw-semibold">{{ etudiant.email }}</p>
-        </div>
-
-        <div class="col-md-6">
-          <p class="text-muted mb-1">Matricule</p>
-          <p class="fw-semibold">{{ etudiant.matricule }}</p>
-        </div>
-
-        <div class="col-md-6">
-          <p class="text-muted mb-1">Filière</p>
-          <p class="fw-semibold">{{ etudiant.filiere }}</p>
-        </div>
-
-        <div class="col-md-6">
-          <p class="text-muted mb-1">Niveau</p>
-          <p class="fw-semibold">{{ etudiant.niveau }}</p>
-        </div>
-
-        <div class="col-md-6">
-          <p class="text-muted mb-1">Encadrant</p>
-          <p class="fw-semibold">{{ encadrantLabel(etudiant.encadrantId) }}</p>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="card-footer bg-white border-top-0 pb-3">
-      <button class="btn btn-primary" (click)="goToEdit()">
-        <i class="bi bi-pencil"></i> Modifier
-      </button>
-    </div>
-  </div>
-</div>
+</section>

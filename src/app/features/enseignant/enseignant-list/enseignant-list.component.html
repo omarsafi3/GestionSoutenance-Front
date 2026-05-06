@@ -6,7 +6,14 @@
 </section>
 
 <section class="panel">
-  <div class="actions-row !mt-0 !mb-4">
+  <div class="list-toolbar">
+    <div class="stats-wrap compact">
+      <div class="stat-pill">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">{{ enseignants.length }}</span>
+      </div>
+    </div>
+
     <button class="btn-primary" type="button" (click)="add()">Ajouter un enseignant</button>
   </div>
 

@@ -170,7 +170,7 @@ export class EncadrantsListComponent implements OnInit, OnDestroy {
               this.extractFilterOptions();
               this.applyFilters();
             }
-            this.successMessage = 'Encadrant supprimé avec succès';
+            this.successMessage = 'Encadrant supprime avec succes';
             this.showDeleteConfirm = false;
             this.selectedIdToDelete = null;
             setTimeout(() => this.successMessage = '', 3000);

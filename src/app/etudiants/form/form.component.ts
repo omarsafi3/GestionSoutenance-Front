@@ -26,15 +26,15 @@ export class FormComponent implements OnInit, OnDestroy {
   niveaux = [
     'Licence 1', 'Licence 2', 'Licence 3',
     'Master 1', 'Master 2',
-    '1ère année préparatoire', '2ème année préparatoire',
-    '1ère année cycle ingénieur', '2ème année cycle ingénieur', '3ème année cycle ingénieur',
-    '1ère année doctorat', '2ème année doctorat', '3ème année doctorat'
+    '1ere annee preparatoire', '2eme annee preparatoire',
+    '1ere annee cycle ingenieur', '2eme annee cycle ingenieur', '3eme annee cycle ingenieur',
+    '1ere annee doctorat', '2eme annee doctorat', '3eme annee doctorat'
   ];
 
   filieres = [
     'Informatique',
-    'Génie Logiciel',
-    'Réseaux & Sécurité',
+    'Genie Logiciel',
+    'Reseaux & Securite',
     'IA & Data Science'
   ];
 
@@ -97,7 +97,7 @@ export class FormComponent implements OnInit, OnDestroy {
           encadrantId: data.encadrantId ?? null
         }),
         error: () => {
-          this.errorMessage = "Erreur lors du chargement de l'étudiant";
+          this.errorMessage = "Erreur lors du chargement de l'etudiant";
         }
       });
   }

@@ -179,7 +179,7 @@ export class ListComponent implements OnInit, OnDestroy {
           this.extractFilterOptions();
           this.applyFilters();
 
-          this.successMessage = 'Étudiant supprimé avec succès';
+          this.successMessage = 'Etudiant supprime avec succes';
           this.showDeleteConfirm = false;
           this.selectedIdToDelete = null;
 

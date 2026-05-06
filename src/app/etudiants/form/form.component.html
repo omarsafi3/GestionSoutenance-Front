@@ -1,107 +1,69 @@
-<div class="container form-page mt-5 mb-5">
-  <div class="row justify-content-center">
-    <div class="col-md-7">
+<section class="page-header">
+  <h1>{{ isEditMode ? 'Modifier un etudiant' : 'Ajouter un etudiant' }}</h1>
+  <p>Profil etudiant, compte de connexion et encadrant associe.</p>
+</section>
 
-      <div class="mb-4 form-header">
-        <span class="header-chip">
-          <i class="bi bi-mortarboard"></i> Module Étudiants
-        </span>
+<section class="panel">
+  <p class="status err" *ngIf="errorMessage">
+    <lucide-icon name="circle-alert" [size]="18"></lucide-icon>
+    {{ errorMessage }}
+  </p>
 
-        <h2 class="display-6">
-          {{ isEditMode ? 'Modifier Étudiant' : 'Ajouter un Étudiant' }}
-        </h2>
-      </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid">
+    <label>Nom
+      <input formControlName="nom" placeholder="Nom" [class.is-invalid]="isFieldInvalid('nom')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('nom')">{{ getFieldError('nom') }}</span>
+    </label>
 
-      <div class="alert alert-danger" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
+    <label>Prenom
+      <input formControlName="prenom" placeholder="Prenom" [class.is-invalid]="isFieldInvalid('prenom')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('prenom')">{{ getFieldError('prenom') }}</span>
+    </label>
 
-      <div class="card shadow-lg form-card">
-        <div class="card-body p-4">
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>Email
+      <input type="email" formControlName="email" placeholder="nom@example.com" [class.is-invalid]="isFieldInvalid('email')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('email')">{{ getFieldError('email') }}</span>
+    </label>
 
-            <!-- NOM -->
-            <div class="mb-3">
-              <label class="form-label">Nom *</label>
-              <input class="form-control" formControlName="nom" [class.is-invalid]="isFieldInvalid('nom')">
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('nom')">{{ getFieldError('nom') }}</div>
-            </div>
+    <label>Mot de passe {{ isEditMode ? '(laisser vide pour ne pas changer)' : '' }}
+      <input type="password" formControlName="password" autocomplete="new-password" [class.is-invalid]="isFieldInvalid('password')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('password')">{{ getFieldError('password') }}</span>
+    </label>
 
-            <!-- PRENOM -->
-            <div class="mb-3">
-              <label class="form-label">Prénom *</label>
-              <input class="form-control" formControlName="prenom" [class.is-invalid]="isFieldInvalid('prenom')">
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('prenom')">{{ getFieldError('prenom') }}</div>
-            </div>
+    <label>Matricule
+      <input formControlName="matricule" placeholder="GL2026001" [class.is-invalid]="isFieldInvalid('matricule')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('matricule')">{{ getFieldError('matricule') }}</span>
+    </label>
 
-            <!-- EMAIL -->
-            <div class="mb-3">
-              <label class="form-label">Email *</label>
-              <input class="form-control" type="email" formControlName="email" placeholder="nom@example.com" [class.is-invalid]="isFieldInvalid('email')">
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">{{ getFieldError('email') }}</div>
-            </div>
+    <label>Filiere
+      <select formControlName="filiere" [class.is-invalid]="isFieldInvalid('filiere')">
+        <option value="">Choisir une filiere</option>
+        <option *ngFor="let f of filieres" [value]="f">{{ f }}</option>
+      </select>
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('filiere')">{{ getFieldError('filiere') }}</span>
+    </label>
 
-            <div class="mb-3">
-              <label class="form-label">Mot de passe {{ isEditMode ? '(laisser vide pour ne pas changer)' : '*' }}</label>
-              <input class="form-control" type="password" formControlName="password" autocomplete="new-password" [class.is-invalid]="isFieldInvalid('password')">
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">{{ getFieldError('password') }}</div>
-            </div>
+    <label>Niveau
+      <select formControlName="niveau" [class.is-invalid]="isFieldInvalid('niveau')">
+        <option value="">Choisir un niveau</option>
+        <option *ngFor="let n of niveaux" [value]="n">{{ n }}</option>
+      </select>
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('niveau')">{{ getFieldError('niveau') }}</span>
+    </label>
 
-            <!-- MATRICULE -->
-            <div class="mb-3">
-              <label class="form-label">Matricule *</label>
-              <input class="form-control" formControlName="matricule" [class.is-invalid]="isFieldInvalid('matricule')">
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('matricule')">{{ getFieldError('matricule') }}</div>
-            </div>
+    <label>Encadrant
+      <select formControlName="encadrantId" [class.is-invalid]="isFieldInvalid('encadrantId')">
+        <option [ngValue]="null">Choisir un encadrant</option>
+        <option *ngFor="let e of enseignants" [ngValue]="e.id">{{ encadrantLabel(e) }}</option>
+      </select>
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('encadrantId')">{{ getFieldError('encadrantId') }}</span>
+    </label>
 
-            <!-- FILIERE -->
-            <div class="mb-3">
-              <label class="form-label">Filière *</label>
-              <select class="form-select" formControlName="filiere">
-                <option value="">-- choisir --</option>
-                <option *ngFor="let f of filieres" [value]="f">{{ f }}</option>
-              </select>
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('filiere')">{{ getFieldError('filiere') }}</div>
-            </div>
-
-            <!-- NIVEAU -->
-            <div class="mb-3">
-              <label class="form-label">Niveau *</label>
-              <select class="form-select" formControlName="niveau">
-                <option value="">-- choisir --</option>
-                <option *ngFor="let n of niveaux" [value]="n">{{ n }}</option>
-              </select>
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('niveau')">{{ getFieldError('niveau') }}</div>
-            </div>
-
-            <!-- ENCADRANT -->
-            <div class="mb-3">
-              <label class="form-label">Encadrant *</label>
-
-              <select class="form-select" formControlName="encadrantId">
-                <option [ngValue]="null">-- choisir un encadrant --</option>
-
-                <option *ngFor="let e of enseignants" [ngValue]="e.id">
-                  {{ encadrantLabel(e) }}
-                </option>
-              </select>
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('encadrantId')">{{ getFieldError('encadrantId') }}</div>
-            </div>
-
-            <div class="d-flex gap-2 justify-content-end">
-              <button type="button" class="btn btn-secondary" (click)="cancel()">
-                Annuler
-              </button>
-
-              <button type="submit" class="btn btn-primary" [disabled]="form.invalid || loading">
-                {{ isEditMode ? 'Modifier' : 'Créer' }}
-              </button>
-            </div>
-
-          </form>
-        </div>
-      </div>
-
+    <div class="actions-row">
+      <button class="btn-primary" type="submit" [disabled]="form.invalid || loading">
+        {{ isEditMode ? 'Enregistrer' : 'Creer' }}
+      </button>
+      <button class="btn-light" type="button" (click)="cancel()" [disabled]="loading">Annuler</button>
     </div>
-  </div>
-</div>
+  </form>
+</section>

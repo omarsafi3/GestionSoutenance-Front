@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -14,7 +15,8 @@ describe('FormComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [FormComponent],
       imports: [FormsModule, ReactiveFormsModule, HttpClientModule, RouterTestingModule],
-      providers: [EtudiantService]
+      providers: [EtudiantService],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
     

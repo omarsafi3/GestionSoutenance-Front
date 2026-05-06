@@ -1,24 +1,19 @@
-<div class="students-page mt-4">
-  <div class="hero-card mb-4">
-    <div class="row align-items-center g-3">
-      <div class="col-lg-8">
-        <h2 class="mb-1">Gestion des Étudiants</h2>
-        <p class="text-muted mb-0">Suivi des profils, recherche rapide et opérations CRUD.</p>
-      </div>
-      <div class="col-lg-4 text-lg-end">
-        <button class="btn btn-success btn-add" routerLink="/etudiants/add">
-          <i class="bi bi-plus-circle"></i> Ajouter un étudiant
-        </button>
-      </div>
-    </div>
+<section class="page-header">
+  <div>
+    <h1>Etudiants</h1>
+    <p>Suivi des profils, affectation des encadrants et recherche rapide.</p>
+  </div>
+</section>
 
-    <div class="stats-wrap mt-3">
+<section class="panel">
+  <div class="list-toolbar">
+    <div class="stats-wrap compact">
       <div class="stat-pill">
         <span class="stat-label">Total</span>
         <span class="stat-value">{{ allEtudiants.length }}</span>
       </div>
       <div class="stat-pill">
-        <span class="stat-label">Affichés</span>
+        <span class="stat-label">Affiches</span>
         <span class="stat-value">{{ filteredEtudiants.length }}</span>
       </div>
       <div class="stat-pill">
@@ -26,135 +21,139 @@
         <span class="stat-value">{{ currentPage }} / {{ totalPages || 1 }}</span>
       </div>
     </div>
+
+    <button class="btn-primary" routerLink="/etudiants/add" type="button">
+      <lucide-icon name="circle-plus" [size]="18"></lucide-icon>
+      Ajouter un etudiant
+    </button>
   </div>
 
-  <div class="alert alert-success alert-dismissible fade show" *ngIf="successMessage">
+  <div class="status ok" *ngIf="successMessage">
+    <lucide-icon name="circle-check" [size]="18"></lucide-icon>
     {{ successMessage }}
-    <button type="button" class="btn-close" (click)="successMessage=''"></button>
+    <button type="button" class="btn-close ms-auto" (click)="successMessage=''"></button>
   </div>
 
-  <div class="alert alert-danger alert-dismissible fade show" *ngIf="errorMessage">
+  <div class="status err" *ngIf="errorMessage">
+    <lucide-icon name="circle-alert" [size]="18"></lucide-icon>
     {{ errorMessage }}
-    <button type="button" class="btn-close" (click)="errorMessage=''"></button>
+    <button type="button" class="btn-close ms-auto" (click)="errorMessage=''"></button>
   </div>
 
-  <div class="card mb-4 shadow-sm">
-    <div class="card-body">
-      <div class="row g-3">
+  <div class="filter-grid">
+    <label class="filter-search">Recherche
+      <input
+        type="text"
+        placeholder="Nom, prenom, email, matricule..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearch(searchTerm)"
+        [disabled]="loading"
+      />
+    </label>
 
-        <div class="col-md-5">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Rechercher..."
-            [(ngModel)]="searchTerm"
-            (input)="onSearch(searchTerm)"
-            [disabled]="loading"
-          />
-        </div>
+    <label class="filter-select">Niveau
+      <select [(ngModel)]="filterNiveau" (change)="onFilterChange()" [disabled]="loading">
+        <option value="">Tous les niveaux</option>
+        <option *ngFor="let n of niveauxUniques" [value]="n">{{ n }}</option>
+      </select>
+    </label>
 
-        <div class="col-md-3">
-          <select class="form-select" [(ngModel)]="filterNiveau" (change)="onFilterChange()">
-            <option value="">Tous niveaux</option>
-            <option *ngFor="let n of niveauxUniques" [value]="n">{{ n }}</option>
-          </select>
-        </div>
+    <label class="filter-select">Filiere
+      <select [(ngModel)]="filterFiliere" (change)="onFilterChange()" [disabled]="loading">
+        <option value="">Toutes les filieres</option>
+        <option *ngFor="let f of filiereUniques" [value]="f">{{ f }}</option>
+      </select>
+    </label>
 
-        <div class="col-md-3">
-          <select class="form-select" [(ngModel)]="filterFiliere" (change)="onFilterChange()">
-            <option value="">Toutes filières</option>
-            <option *ngFor="let f of filiereUniques" [value]="f">{{ f }}</option>
-          </select>
-        </div>
-
-        <div class="col-md-1">
-          <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">
-            <i class="bi bi-arrow-clockwise"></i>
-          </button>
-        </div>
-
-      </div>
+    <div class="filter-reset">
+      <button class="btn-light icon-button" type="button" (click)="resetFilters()" [disabled]="!hasFilters || loading" title="Reinitialiser les filtres">
+        <lucide-icon name="rotate-cw" [size]="18"></lucide-icon>
+      </button>
     </div>
   </div>
 
-  <div class="text-center py-4" *ngIf="loading">
-    <div class="spinner-border"></div>
+  <div class="status ok" *ngIf="loading">
+    <span class="spinner-border"></span>
+    Chargement des etudiants...
   </div>
 
-  <div class="card" *ngIf="!loading && paginatedEtudiants.length > 0">
-    <div class="table-responsive">
-      <table class="table table-hover mb-0">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Email</th>
-            <th>Matricule</th>
-            <th>Filière</th>
-            <th>Niveau</th>
-            <th>Encadrant</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+  <div class="table-responsive" *ngIf="!loading && paginatedEtudiants.length">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Prenom</th>
+          <th>Email</th>
+          <th>Matricule</th>
+          <th>Filiere</th>
+          <th>Niveau</th>
+          <th>Encadrant</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-        <tbody>
-          <tr *ngFor="let e of paginatedEtudiants">
-            <td>{{ e.id }}</td>
-            <td>{{ e.nom }}</td>
-            <td>{{ e.prenom }}</td>
-            <td>{{ e.email }}</td>
-            <td>{{ e.matricule }}</td>
-            <td>{{ e.filiere }}</td>
-            <td>{{ e.niveau }}</td>
-            <td>
-              {{ encadrantLabelForStudent(e) }}
-            </td>
-
-            <td>
-              <button class="btn btn-sm btn-info" (click)="view(e.id)">Voir</button>
-              <button class="btn btn-sm btn-primary" (click)="edit(e.id)">Edit</button>
-              <button class="btn btn-sm btn-danger" (click)="openDeleteConfirm(e.id!)">Del</button>
-            </td>
-          </tr>
-        </tbody>
-
-      </table>
-    </div>
+      <tbody>
+        <tr *ngFor="let e of paginatedEtudiants">
+          <td><strong>{{ e.nom }}</strong></td>
+          <td>{{ e.prenom }}</td>
+          <td><a [href]="'mailto:' + e.email">{{ e.email }}</a></td>
+          <td><span class="badge bg-secondary">{{ e.matricule }}</span></td>
+          <td>{{ e.filiere }}</td>
+          <td>{{ e.niveau }}</td>
+          <td>{{ encadrantLabelForStudent(e) }}</td>
+          <td>
+            <div class="actions-row !mt-0">
+              <button class="btn-light btn-sm" type="button" (click)="view(e.id)">Voir</button>
+              <button class="btn-light btn-sm" type="button" (click)="edit(e.id)">Modifier</button>
+              <button class="btn-danger btn-sm" type="button" (click)="openDeleteConfirm(e.id!)">Supprimer</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <div *ngIf="!loading && paginatedEtudiants.length === 0" class="text-center py-5">
-    Aucun étudiant
-  </div>
+  <p class="status ok empty-state" *ngIf="!loading && !paginatedEtudiants.length">
+    <lucide-icon name="inbox" [size]="22"></lucide-icon>
+    Aucun etudiant trouve.
+  </p>
 
-  <nav class="mt-3" *ngIf="totalPages > 1">
-    <button (click)="previousPage()" [disabled]="currentPage===1">Prev</button>
-    <span>{{ currentPage }} / {{ totalPages }}</span>
-    <button (click)="nextPage()" [disabled]="currentPage===totalPages">Next</button>
+  <nav class="pagination-nav" *ngIf="!loading && totalPages > 1" aria-label="Pagination des etudiants">
+    <button class="page-link pager-edge" type="button" (click)="previousPage()" [disabled]="currentPage === 1">
+      Precedent
+    </button>
+    <button
+      class="page-link"
+      type="button"
+      *ngFor="let page of [].constructor(totalPages); let i = index"
+      [class.active]="currentPage === i + 1"
+      (click)="goToPage(i + 1)">
+      {{ i + 1 }}
+    </button>
+    <button class="page-link pager-edge" type="button" (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Suivant
+    </button>
   </nav>
+</section>
 
-  <div *ngIf="showDeleteConfirm" class="modal-backdrop show">
-    <div class="modal d-block">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <div class="modal-header bg-danger text-white">
-            <h5>Confirmer</h5>
-            <button class="btn-close" (click)="cancelDelete()"></button>
-          </div>
-
-          <div class="modal-body">
-            Supprimer cet étudiant ?
-          </div>
-
-          <div class="modal-footer">
-            <button class="btn btn-secondary" (click)="cancelDelete()">No</button>
-            <button class="btn btn-danger" (click)="confirmDelete()">Yes</button>
-          </div>
-
-        </div>
+<div *ngIf="showDeleteConfirm" class="modal-backdrop show"></div>
+<div *ngIf="showDeleteConfirm" class="modal show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <lucide-icon name="triangle-alert" [size]="18"></lucide-icon>
+          Supprimer l'etudiant
+        </h5>
+        <button class="btn-close" type="button" (click)="cancelDelete()"></button>
+      </div>
+      <div class="modal-body">
+        Cette action supprimera definitivement cet etudiant.
+      </div>
+      <div class="modal-footer">
+        <button class="btn-light" type="button" (click)="cancelDelete()">Annuler</button>
+        <button class="btn-danger" type="button" (click)="confirmDelete()">Supprimer</button>
       </div>
     </div>
   </div>
-
 </div>

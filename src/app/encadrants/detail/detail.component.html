@@ -1,54 +1,59 @@
-<div class="container py-4 detail-page">
-  <div class="d-flex justify-content-between align-items-center mb-4 detail-header">
-    <div>
-      <span class="header-chip">Fiche encadrant</span>
-      <h2 class="mb-0 mt-2">Détails encadrant</h2>
-    </div>
-    <button class="btn btn-outline-secondary" (click)="goToList()">
-      <i class="bi bi-arrow-left"></i> Retour a la liste
+<section class="page-header">
+  <div>
+    <h1>Details encadrant</h1>
+    <p>Fiche profil, grade et specialite d'encadrement.</p>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="actions-row !mt-0 !mb-4">
+    <button class="btn-light" type="button" (click)="goToList()">
+      <lucide-icon name="arrow-left" [size]="18"></lucide-icon>
+      Retour
+    </button>
+    <button class="btn-primary" type="button" *ngIf="encadrant" (click)="goToEdit()">
+      Modifier
     </button>
   </div>
 
-  <div class="text-center py-5" *ngIf="loading">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Chargement...</span>
-    </div>
-    <p class="text-muted mt-3 mb-0">Chargement des details...</p>
+  <div class="status ok" *ngIf="loading">
+    <span class="spinner-border"></span>
+    Chargement des details...
   </div>
 
-  <div class="alert alert-danger" *ngIf="!loading && errorMessage">
-    {{ errorMessage }}
-  </div>
+  <p class="status err" *ngIf="!loading && errorMessage">{{ errorMessage }}</p>
 
-  <div class="card shadow-sm detail-card" *ngIf="!loading && encadrant">
-    <div class="card-body">
-      <div class="row g-3">
-        <div class="col-md-6">
-          <p class="mb-1 text-muted label">Nom</p>
-          <p class="fw-semibold value">{{ encadrant.nom }}</p>
+  <div class="details-grid" *ngIf="!loading && encadrant">
+    <article class="detail-block">
+      <h3>Identite</h3>
+      <dl>
+        <div>
+          <dt>Nom</dt>
+          <dd>{{ encadrant.nom }}</dd>
         </div>
-        <div class="col-md-6">
-          <p class="mb-1 text-muted label">Prénom</p>
-          <p class="fw-semibold value">{{ encadrant.prenom }}</p>
+        <div>
+          <dt>Prenom</dt>
+          <dd>{{ encadrant.prenom }}</dd>
         </div>
-        <div class="col-md-6">
-          <p class="mb-1 text-muted label">Email</p>
-          <p class="fw-semibold value">{{ encadrant.email }}</p>
+        <div>
+          <dt>Email</dt>
+          <dd><a [href]="'mailto:' + encadrant.email">{{ encadrant.email }}</a></dd>
         </div>
-        <div class="col-md-6">
-          <p class="mb-1 text-muted label">Grade</p>
-          <p class="fw-semibold value">{{ encadrant.grade }}</p>
+      </dl>
+    </article>
+
+    <article class="detail-block">
+      <h3>Enseignement</h3>
+      <dl>
+        <div>
+          <dt>Grade</dt>
+          <dd>{{ encadrant.grade }}</dd>
         </div>
-        <div class="col-md-6">
-          <p class="mb-1 text-muted label">Spécialité</p>
-          <p class="fw-semibold value">{{ encadrant.specialite }}</p>
+        <div>
+          <dt>Specialite</dt>
+          <dd>{{ encadrant.specialite }}</dd>
         </div>
-      </div>
-    </div>
-    <div class="card-footer bg-white border-top-0 pb-3">
-      <button class="btn btn-primary" (click)="goToEdit()">
-        <i class="bi bi-pencil"></i> Modifier
-      </button>
-    </div>
+      </dl>
+    </article>
   </div>
-</div>
+</section>

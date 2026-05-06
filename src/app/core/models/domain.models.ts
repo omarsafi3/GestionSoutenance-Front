@@ -6,13 +6,17 @@ export interface Soutenance {
   date?: string;
   duree?: number;
   presidentId?: number;
+  presidentNom?: string;
   rapporteurId?: number;
+  rapporteurNom?: string;
   examinateurId?: number;
+  examinateurNom?: string;
   etudiantId?: number;
   etudiantNom?: string;
   etudiantPrenom?: string;
   encadrantId?: number;
   salleId?: number;
+  salleNom?: string;
   statut?: string;
   notePresident?: number;
   noteRapporteur?: number;

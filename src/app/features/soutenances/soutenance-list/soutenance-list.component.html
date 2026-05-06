@@ -6,8 +6,15 @@
 </section>
 
 <section class="panel">
-  <div class="actions-row !mt-0 !mb-4" *ngIf="isAdmin">
-    <button class="btn-primary" type="button" (click)="add()">Ajouter une soutenance</button>
+  <div class="list-toolbar">
+    <div class="stats-wrap compact">
+      <div class="stat-pill">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">{{ soutenances.length }}</span>
+      </div>
+    </div>
+
+    <button class="btn-primary" type="button" *ngIf="isAdmin" (click)="add()">Ajouter une soutenance</button>
   </div>
 
   <div class="status ok" *ngIf="loading">
@@ -57,7 +64,7 @@
     <div>
       <span class="eyebrow">Fiche soutenance</span>
       <h2>{{ selected.titre }}</h2>
-      <p>{{ selected.date | date:'full' }} · {{ selected.duree }} min</p>
+      <p>{{ selected.date | date:'full' }} - {{ selected.duree }} min</p>
     </div>
     <button class="btn-light btn-sm" type="button" (click)="closeDetails()">Fermer</button>
   </div>
@@ -78,7 +85,7 @@
         </div>
         <div>
           <dt>Salle</dt>
-          <dd>{{ selected.salleId ? 'Salle #' + selected.salleId : '-' }}</dd>
+          <dd>{{ selected.salleNom || (selected.salleId ? 'Salle #' + selected.salleId : '-') }}</dd>
         </div>
       </dl>
     </article>

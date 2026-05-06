@@ -98,7 +98,7 @@ export class EncadrantsFormComponent implements OnInit, OnDestroy {
       return `${this.getFieldLabel(field)} est obligatoire`;
     }
     if (fieldControl.errors['minlength']) {
-      return `${this.getFieldLabel(field)} doit contenir au moins ${fieldControl.errors['minlength'].requiredLength} caractères`;
+      return `${this.getFieldLabel(field)} doit contenir au moins ${fieldControl.errors['minlength'].requiredLength} caracteres`;
     }
     if (fieldControl.errors['email']) {
       return 'Adresse email invalide';
@@ -109,10 +109,10 @@ export class EncadrantsFormComponent implements OnInit, OnDestroy {
   private getFieldLabel(field: string): string {
     const labels: { [key: string]: string } = {
       nom: 'Nom',
-      prenom: 'Prénom',
+      prenom: 'Prenom',
       email: 'Email',
       grade: 'Grade',
-      specialite: 'Spécialité',
+      specialite: 'Specialite',
       password: 'Mot de passe'
     };
     return labels[field] || field;
@@ -138,7 +138,7 @@ export class EncadrantsFormComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
-            this.successMessage = 'Encadrant modifié avec succès';
+            this.successMessage = 'Encadrant modifie avec succes';
             setTimeout(() => this.router.navigate(['/encadrants']), 1800);
           },
           error: (error) => this.errorMessage = error.message || 'Erreur lors de la modification de l encadrant'
@@ -148,10 +148,10 @@ export class EncadrantsFormComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
-            this.successMessage = 'Encadrant créé avec succès';
+            this.successMessage = 'Encadrant cree avec succes';
             setTimeout(() => this.router.navigate(['/encadrants']), 1800);
           },
-          error: (error) => this.errorMessage = error.message || 'Erreur lors de la création de l encadrant'
+          error: (error) => this.errorMessage = error.message || 'Erreur lors de la creation de l encadrant'
         });
     }
   }

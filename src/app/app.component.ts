@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
-import { environment } from '../environments/environment';
 import { AuthSession, UserRole } from './core/auth/auth.models';
 import { AuthService } from './core/auth/auth.service';
 
@@ -12,7 +11,6 @@ import { AuthService } from './core/auth/auth.service';
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
   title = 'GestionSoutenance-Front';
-  apiUrl = environment.apiUrl;
   navOpen = false;
   modulesOpen = false;
 
@@ -105,7 +103,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   private revealElements(): HTMLElement[] {
     return Array.from(this.elementRef.nativeElement.querySelectorAll<HTMLElement>(
-      '[data-reveal], .page-header, .panel, .card, .hero-card, .filters-card, .table-card, .detail-card, .form-card, .summary-tile, .result-card'
+      '[data-reveal], .page-header, .panel, .summary-tile, .result-card, .detail-block'
     ));
   }
 }

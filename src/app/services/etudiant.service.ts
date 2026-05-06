@@ -53,7 +53,7 @@ export class EtudiantService {
       catchError(err => {
         const errorMsg = this.extractErrorMessage(
           err,
-          'Erreur lors du chargement des étudiants'
+          'Erreur lors du chargement des etudiants'
         );
         this.error$.next(errorMsg);
         this.loading$.next(false);
@@ -71,7 +71,7 @@ export class EtudiantService {
       catchError(err => {
         const errorMsg = this.extractErrorMessage(
           err,
-          'Erreur lors du chargement de l\'étudiant'
+          'Erreur lors du chargement de l\'etudiant'
         );
         this.error$.next(errorMsg);
         this.loading$.next(false);
@@ -105,7 +105,7 @@ export class EtudiantService {
       catchError(err => {
         const errorMsg = this.extractErrorMessage(
           err,
-          'Erreur lors de la création de l\'étudiant'
+          'Erreur lors de la creation de l\'etudiant'
         );
         this.error$.next(errorMsg);
         this.loading$.next(false);
@@ -133,7 +133,7 @@ export class EtudiantService {
       catchError(err => {
         const errorMsg = this.extractErrorMessage(
           err,
-          'Erreur lors de la modification de l\'étudiant'
+          'Erreur lors de la modification de l\'etudiant'
         );
         this.error$.next(errorMsg);
         this.loading$.next(false);
@@ -156,7 +156,7 @@ export class EtudiantService {
       catchError(err => {
         const errorMsg = this.extractErrorMessage(
           err,
-          'Erreur lors de la suppression de l\'étudiant'
+          'Erreur lors de la suppression de l\'etudiant'
         );
         this.error$.next(errorMsg);
         this.loading$.next(false);
