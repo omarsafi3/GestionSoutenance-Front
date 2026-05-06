@@ -1,15 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, finalize, map, of, shareReplay, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthResponse, AuthSession, LoginRequest, RefreshTokenRequest, UserRole } from './auth.models';
 
 const STORAGE_KEY = 'soutenance.auth.session';
+const EXPIRATION_SKEW_MS = 30_000;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly authUrl = `${environment.apiUrl}/auth`;
   private readonly sessionSubject = new BehaviorSubject<AuthSession | null>(this.readSession());
+  private refreshRequest$: Observable<AuthResponse> | null = null;
 
   readonly session$ = this.sessionSubject.asObservable();
 
@@ -24,13 +26,23 @@ export class AuthService {
   refresh(): Observable<AuthResponse> {
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
-      throw new Error('No refresh token available');
+      return throwError(() => new Error('No refresh token available'));
+    }
+
+    if (this.refreshRequest$) {
+      return this.refreshRequest$;
     }
 
     const request: RefreshTokenRequest = { refreshToken };
-    return this.http.post<AuthResponse>(`${this.authUrl}/refresh`, request).pipe(
-      tap((response) => this.storeResponse(response))
+    this.refreshRequest$ = this.http.post<AuthResponse>(`${this.authUrl}/refresh`, request).pipe(
+      tap((response) => this.storeResponse(response)),
+      finalize(() => {
+        this.refreshRequest$ = null;
+      }),
+      shareReplay(1)
     );
+
+    return this.refreshRequest$;
   }
 
   logout(): void {
@@ -75,8 +87,36 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
+    return this.hasRefreshableSession();
+  }
+
+  hasValidAccessToken(): boolean {
     const session = this.sessionSubject.value;
-    return !!session && session.accessTokenExpiresAt > Date.now();
+    return !!session && session.accessTokenExpiresAt > Date.now() + EXPIRATION_SKEW_MS;
+  }
+
+  hasRefreshableSession(): boolean {
+    const session = this.sessionSubject.value;
+    return !!session && session.refreshTokenExpiresAt > Date.now() + EXPIRATION_SKEW_MS;
+  }
+
+  ensureAuthenticated(): Observable<boolean> {
+    if (this.hasValidAccessToken()) {
+      return of(true);
+    }
+
+    if (!this.hasRefreshableSession()) {
+      this.logout();
+      return of(false);
+    }
+
+    return this.refresh().pipe(
+      map(() => true),
+      catchError(() => {
+        this.logout();
+        return of(false);
+      })
+    );
   }
 
   hasRole(role: UserRole | string): boolean {

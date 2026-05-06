@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { map } from 'rxjs';
 import { AuthService } from '../auth.service';
 
 function toRoleList(roles: string | readonly string[]): readonly string[] {
@@ -17,33 +18,43 @@ function unauthorizedTree(router: Router) {
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  return authService.isAuthenticated() ? true : loginTree(router);
+  return authService.ensureAuthenticated().pipe(
+    map((authenticated) => authenticated ? true : loginTree(router))
+  );
 };
 
 export const roleGuard: CanActivateFn = (route) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (!authService.isAuthenticated()) {
-    return loginTree(router);
-  }
+  return authService.ensureAuthenticated().pipe(
+    map((authenticated) => {
+      if (!authenticated) {
+        return loginTree(router);
+      }
 
-  const rolesFromData = route.data?.['roles'];
-  if (!Array.isArray(rolesFromData) || rolesFromData.length === 0) {
-    return true;
-  }
+      const rolesFromData = route.data?.['roles'];
+      if (!Array.isArray(rolesFromData) || rolesFromData.length === 0) {
+        return true;
+      }
 
-  return authService.hasAnyRole(rolesFromData) ? true : unauthorizedTree(router);
+      return authService.hasAnyRole(rolesFromData) ? true : unauthorizedTree(router);
+    })
+  );
 };
 
 export function requireRoleGuard(role: string): CanActivateFn {
   return () => {
     const authService = inject(AuthService);
     const router = inject(Router);
-    if (!authService.isAuthenticated()) {
-      return loginTree(router);
-    }
-    return authService.hasRole(role) ? true : unauthorizedTree(router);
+    return authService.ensureAuthenticated().pipe(
+      map((authenticated) => {
+        if (!authenticated) {
+          return loginTree(router);
+        }
+        return authService.hasRole(role) ? true : unauthorizedTree(router);
+      })
+    );
   };
 }
 
@@ -51,10 +62,14 @@ export function requireAnyRoleGuard(roles: readonly string[]): CanActivateFn {
   return () => {
     const authService = inject(AuthService);
     const router = inject(Router);
-    if (!authService.isAuthenticated()) {
-      return loginTree(router);
-    }
-    return authService.hasAnyRole(roles) ? true : unauthorizedTree(router);
+    return authService.ensureAuthenticated().pipe(
+      map((authenticated) => {
+        if (!authenticated) {
+          return loginTree(router);
+        }
+        return authService.hasAnyRole(roles) ? true : unauthorizedTree(router);
+      })
+    );
   };
 }
 
