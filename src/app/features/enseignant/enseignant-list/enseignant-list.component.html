@@ -53,3 +53,27 @@
 
   <p class="status ok" *ngIf="!loading && !enseignants.length">Aucun enseignant disponible.</p>
 </section>
+
+<div *ngIf="deleteConfirmMessage" class="modal-backdrop show"></div>
+<div *ngIf="deleteConfirmMessage" class="modal show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <lucide-icon name="triangle-alert" [size]="18"></lucide-icon>
+          Supprimer l'enseignant
+        </h5>
+        <button class="btn-close" type="button" (click)="cancelDelete()"></button>
+      </div>
+      <div class="modal-body">
+        Cette action supprimera definitivement cet enseignant.
+      </div>
+      <div class="modal-footer">
+        <button class="btn-light" type="button" (click)="cancelDelete()">Annuler</button>
+        <button class="btn-danger" type="button" (click)="confirmDelete()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="status err" *ngIf="errorMessage">{{ errorMessage }}</p>

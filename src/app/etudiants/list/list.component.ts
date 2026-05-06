@@ -186,11 +186,22 @@ export class ListComponent implements OnInit, OnDestroy {
           setTimeout(() => this.successMessage = '', 3000);
         },
         error: (err) => {
-          this.errorMessage = err.message || 'Erreur lors de la suppression';
+          const message = this.extractDeleteErrorMessage(err);
+          this.errorMessage = message;
           this.showDeleteConfirm = false;
           this.selectedIdToDelete = null;
         }
       });
+  }
+
+  private extractDeleteErrorMessage(err: any): string {
+    const errorMsg = err?.error?.message || err?.message || '';
+    
+    if (errorMsg.toLowerCase().includes('foreign key') || errorMsg.toLowerCase().includes('constraint')) {
+      return 'Cet etudiant a une soutenance assignee, impossible a supprimer';
+    }
+    
+    return 'Erreur lors de la suppression';
   }
 
   resetFilters(): void {

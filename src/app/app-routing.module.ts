@@ -32,7 +32,7 @@ const routes: Routes = [
   { path: 'encadrants/add', component: EncadrantsFormComponent, canActivate: [roleGuard], data: { title: 'Ajouter un encadrant', roles: ['ADMIN'] } },
   { path: 'encadrants/edit/:id', component: EncadrantsFormComponent, canActivate: [roleGuard], data: { title: 'Modifier encadrant', roles: ['ADMIN'] } },
   { path: 'encadrants/:id', component: EncadrantsDetailComponent, canActivate: [roleGuard], data: { title: 'Detail encadrant', roles: ['ADMIN'] } },
-  { path: 'notes', component: NotesPageComponent, canActivate: [roleGuard], data: { title: 'Gestion des notes', roles: ['ADMIN', 'ENSEIGNANT'] } },
+  { path: 'notes', component: NotesPageComponent, canActivate: [roleGuard], data: { title: 'Gestion des notes', roles: ['ENSEIGNANT'] } },
   { path: 'enseignants', component: EnseignantListComponent, canActivate: [roleGuard], data: { title: 'Liste des enseignants', roles: ['ADMIN'] } },
   { path: 'enseignants/add', component: EnseignantFormComponent, canActivate: [roleGuard], data: { title: 'Ajouter enseignant', roles: ['ADMIN'] } },
   { path: 'enseignants/edit/:id', component: EnseignantFormComponent, canActivate: [roleGuard], data: { title: 'Modifier enseignant', roles: ['ADMIN'] } },

@@ -31,9 +31,48 @@ export class EnseignantListComponent implements OnInit {
     this.service.getLoading().subscribe(l => this.loading = l);
   }
 
+  deleteConfirmMessage = '';
+  selectedDeleteId: number | null = null;
+  errorMessage = '';
+
   delete(id?: number): void {
     if (!id) return;
-    this.service.delete(id).subscribe();
+    this.selectedDeleteId = id;
+    this.deleteConfirmMessage = 'Confirmer la suppression de cet enseignant ?';
+  }
+
+  confirmDelete(): void {
+    if (!this.selectedDeleteId) return;
+
+    this.service.delete(this.selectedDeleteId).subscribe({
+      next: () => {
+        this.enseignants = this.enseignants.filter(e => e.id !== this.selectedDeleteId);
+        this.selectedDeleteId = null;
+        this.deleteConfirmMessage = '';
+      },
+      error: (err) => {
+        const message = this.extractDeleteErrorMessage(err);
+        this.errorMessage = message;
+        this.selectedDeleteId = null;
+        this.deleteConfirmMessage = '';
+        setTimeout(() => this.errorMessage = '', 3000);
+      }
+    });
+  }
+
+  cancelDelete(): void {
+    this.selectedDeleteId = null;
+    this.deleteConfirmMessage = '';
+  }
+
+  private extractDeleteErrorMessage(err: any): string {
+    const errorMsg = err?.error?.message || err?.message || '';
+    
+    if (errorMsg.toLowerCase().includes('foreign key') || errorMsg.toLowerCase().includes('constraint')) {
+      return 'Cet enseignant a des soutenances assignees, impossible a supprimer';
+    }
+    
+    return 'Erreur lors de la suppression';
   }
 
   edit(id?: number): void {

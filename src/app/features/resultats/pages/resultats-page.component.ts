@@ -19,18 +19,6 @@ import { AuthService } from '../../../core/auth/auth.service';
     </section>
 
     <section class="panel">
-      <div class="inline-tools" *ngIf="isAdmin">
-        <label>Calculer un resultat
-          <select [(ngModel)]="selectedCalculateSoutenanceId" [ngModelOptions]="{standalone: true}">
-            <option [ngValue]="0">Selectionner une soutenance complete</option>
-            <option *ngFor="let s of calculableSoutenances" [ngValue]="s.id">{{ soutenanceLabel(s.id) }}</option>
-          </select>
-        </label>
-        <button class="btn-primary" type="button" (click)="calculateSelected()" [disabled]="!selectedCalculateSoutenanceId">
-          Calculer
-        </button>
-      </div>
-
       <div class="actions-row">
         <button class="btn-light" type="button" (click)="load()">Actualiser</button>
       </div>
@@ -95,7 +83,6 @@ export class ResultatsPageComponent implements OnInit {
 
   resultats: Resultat[] = [];
   soutenances: Soutenance[] = [];
-  selectedCalculateSoutenanceId = 0;
   loading = false;
   errorMessage = '';
   successMessage = '';
@@ -107,17 +94,6 @@ export class ResultatsPageComponent implements OnInit {
   ngOnInit(): void {
     this.loadSoutenances();
     this.load();
-  }
-
-  get calculableSoutenances(): Soutenance[] {
-    const resultSoutenanceIds = new Set(this.resultats.map(resultat => resultat.soutenanceId));
-    return this.soutenances.filter(soutenance =>
-      !!soutenance.id
-      && soutenance.notePresident != null
-      && soutenance.noteRapporteur != null
-      && soutenance.noteExaminateur != null
-      && !resultSoutenanceIds.has(soutenance.id)
-    );
   }
 
   load(): void {
@@ -164,26 +140,6 @@ export class ResultatsPageComponent implements OnInit {
       },
       error: err => {
         this.errorMessage = err?.error?.message || 'Publication impossible.';
-      }
-    });
-  }
-
-  calculateSelected(): void {
-    if (!this.selectedCalculateSoutenanceId) {
-      return;
-    }
-    this.calculate(this.selectedCalculateSoutenanceId);
-  }
-
-  calculate(soutenanceId: number): void {
-    this.resultatsService.calculateBySoutenance(soutenanceId).subscribe({
-      next: () => {
-        this.successMessage = 'Resultat calcule.';
-        this.selectedCalculateSoutenanceId = 0;
-        this.load();
-      },
-      error: err => {
-        this.errorMessage = err?.error?.message || 'Calcul impossible.';
       }
     });
   }
