@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Encadrant } from '../models/domain.models';
 import { ApiBaseService } from './api-base.service';
 
-type EncadrantPayload = Pick<Encadrant, 'nom' | 'prenom' | 'email'> & Partial<Pick<Encadrant, 'grade' | 'specialite'>>;
+type EncadrantPayload = Pick<Encadrant, 'nom' | 'prenom' | 'email'> & Partial<Pick<Encadrant, 'grade' | 'specialite' | 'password'>>;
 
 @Injectable({ providedIn: 'root' })
 export class EncadrantsService extends ApiBaseService {

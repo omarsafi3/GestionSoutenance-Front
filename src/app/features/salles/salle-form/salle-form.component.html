@@ -4,13 +4,17 @@
 </section>
 
 <section class="panel">
+  <p class="status err" *ngIf="errorMessage">{{ errorMessage }}</p>
+
   <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
     <label>Nom
-      <input formControlName="nom" placeholder="Salle A1">
+      <input formControlName="nom" placeholder="Salle A1" [class.is-invalid]="isFieldInvalid('nom')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('nom')">{{ getFieldError('nom') }}</span>
     </label>
 
     <label>Capacite
-      <input type="number" formControlName="capacite" placeholder="40">
+      <input type="number" formControlName="capacite" placeholder="40" [class.is-invalid]="isFieldInvalid('capacite')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('capacite')">{{ getFieldError('capacite') }}</span>
     </label>
 
     <label>Localisation
@@ -23,7 +27,7 @@
     </label>
 
     <div class="actions-row">
-      <button class="btn-primary" type="submit" [disabled]="form.invalid">Enregistrer</button>
+      <button class="btn-primary" type="submit" [disabled]="form.invalid || loading">Enregistrer</button>
       <a class="btn-light" routerLink="/salles">Annuler</a>
     </div>
   </form>

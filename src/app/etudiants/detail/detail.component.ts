@@ -12,6 +12,7 @@ import { EtudiantService } from '../../services/etudiant.service';
 })
 export class DetailComponent implements OnInit, OnDestroy {
   etudiant: Etudiant | null = null;
+  enseignants: any[] = [];
   loading = false;
   errorMessage = '';
 
@@ -28,6 +29,14 @@ export class DetailComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(l => this.loading = l);
 
+    this.service.getEnseignants()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: data => (this.enseignants = data),
+        error: () => {
+          this.enseignants = [];
+        }
+      });
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (!id) {
       this.errorMessage = 'Identifiant étudiant invalide.';
@@ -55,6 +64,12 @@ export class DetailComponent implements OnInit, OnDestroy {
     if (this.etudiant?.id) {
       this.router.navigate(['/etudiants/edit', this.etudiant.id]);
     }
+  }
+
+  encadrantLabel(id?: number): string {
+    if (!id) return '-';
+    const enseignant = this.enseignants.find(item => item.id === id);
+    return enseignant ? [enseignant.nom, enseignant.prenom].filter(Boolean).join(' ') : `#${id}`;
   }
 
   ngOnDestroy(): void {

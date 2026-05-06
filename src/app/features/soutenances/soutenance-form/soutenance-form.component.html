@@ -4,17 +4,22 @@
 </section>
 
 <section class="panel">
+  <p class="status err" *ngIf="errorMessage">{{ errorMessage }}</p>
+
   <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
     <label>Titre
-      <input formControlName="titre" placeholder="Titre du projet">
+      <input formControlName="titre" placeholder="Titre du projet" [class.is-invalid]="isFieldInvalid('titre')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('titre')">{{ getFieldError('titre') }}</span>
     </label>
 
     <label>Date
-      <input type="datetime-local" formControlName="date">
+      <input type="datetime-local" formControlName="date" [class.is-invalid]="isFieldInvalid('date')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('date')">{{ getFieldError('date') }}</span>
     </label>
 
     <label>Duree
-      <input type="number" formControlName="duree" placeholder="60">
+      <input type="number" formControlName="duree" placeholder="60" [class.is-invalid]="isFieldInvalid('duree')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('duree')">{{ getFieldError('duree') }}</span>
     </label>
 
     <label>Statut
@@ -63,7 +68,7 @@
     </label>
 
     <div class="actions-row">
-      <button class="btn-primary" type="submit" [disabled]="form.invalid">Enregistrer</button>
+      <button class="btn-primary" type="submit" [disabled]="form.invalid || loading || isFinished">Enregistrer</button>
       <a class="btn-light" routerLink="/soutenances">Annuler</a>
     </div>
   </form>

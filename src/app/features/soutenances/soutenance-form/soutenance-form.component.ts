@@ -22,6 +22,10 @@ export class SoutenanceFormComponent implements OnInit {
   enseignants: Enseignant[] = [];
   salles: Salle[] = [];
   etudiants: Etudiant[] = [];
+  submitted = false;
+  loading = false;
+  errorMessage = '';
+  isFinished = false;
   
 
   constructor(
@@ -39,7 +43,7 @@ export class SoutenanceFormComponent implements OnInit {
     this.form = this.fb.group({
       titre: ['', Validators.required],
       date: ['', Validators.required],
-      duree: [0, Validators.required],
+      duree: [60, [Validators.required, Validators.min(1)]],
       statut: ['PLANIFIEE'],
 
       presidentId: ['', Validators.required],
@@ -48,12 +52,22 @@ export class SoutenanceFormComponent implements OnInit {
       salleId: ['', Validators.required],
       etudiantId: ['', Validators.required]
     });
+    this.service.getLoading().subscribe(loading => (this.loading = loading));
+    this.service.getError().subscribe(error => {
+      if (error) {
+        this.errorMessage = error;
+      }
+    });
 
     this.id = Number(this.route.snapshot.paramMap.get('id'));
 
     if (this.id) {
       this.service.getById(this.id).subscribe(data => {
         this.form.patchValue(data);
+        this.isFinished = data.statut === 'TERMINEE';
+        if (this.isFinished) {
+          this.form.disable();
+        }
       });
     }
     this.enseignantService.loadAll().subscribe();
@@ -70,7 +84,18 @@ export class SoutenanceFormComponent implements OnInit {
     });
   }
 
-  submit() {
+  submit(): void {
+  this.submitted = true;
+  this.errorMessage = '';
+  if (this.isFinished) {
+    this.errorMessage = 'Une soutenance terminee ne peut plus etre modifiee.';
+    return;
+  }
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    this.errorMessage = 'Veuillez corriger les erreurs du formulaire.';
+    return;
+  }
   const v = this.form.value;
 
   const payload = {
@@ -89,10 +114,29 @@ export class SoutenanceFormComponent implements OnInit {
 
   if (this.id) {
     this.service.update(this.id, payload)
-      .subscribe(() => this.router.navigate(['/soutenances']));
+      .subscribe({
+        next: () => this.router.navigate(['/soutenances']),
+        error: err => (this.errorMessage = err.message || 'Modification impossible.')
+      });
   } else {
     this.service.create(payload)
-      .subscribe(() => this.router.navigate(['/soutenances']));
+      .subscribe({
+        next: () => this.router.navigate(['/soutenances']),
+        error: err => (this.errorMessage = err.message || 'Creation impossible.')
+      });
   }
 }
+
+  isFieldInvalid(field: string): boolean {
+    const ctrl = this.form.get(field);
+    return !!(ctrl && ctrl.invalid && (ctrl.dirty || ctrl.touched || this.submitted));
+  }
+
+  getFieldError(field: string): string {
+    const ctrl = this.form.get(field);
+    if (!ctrl?.errors) return '';
+    if (ctrl.errors['required']) return `${field} est obligatoire`;
+    if (ctrl.errors['min']) return 'Valeur invalide';
+    return 'Valeur invalide';
+  }
 }

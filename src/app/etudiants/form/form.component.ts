@@ -53,7 +53,10 @@ export class FormComponent implements OnInit, OnDestroy {
     if (id) {
       this.isEditMode = true;
       this.etudiantId = +id;
+      this.setPasswordValidators(false);
       this.loadEtudiant(this.etudiantId);
+    } else {
+      this.setPasswordValidators(true);
     }
 
     this.service.getLoading()
@@ -80,7 +83,8 @@ export class FormComponent implements OnInit, OnDestroy {
       filiere: ['', Validators.required],
       niveau: ['', Validators.required],
 
-      encadrantId: [null]   // IMPORTANT
+      encadrantId: [null, Validators.required],
+      password: ['', [Validators.minLength(6)]]
     });
   }
 
@@ -88,7 +92,10 @@ export class FormComponent implements OnInit, OnDestroy {
     this.service.getById(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (data) => this.form.patchValue(data),
+        next: (data) => this.form.patchValue({
+          ...data,
+          encadrantId: data.encadrantId ?? null
+        }),
         error: () => {
           this.errorMessage = "Erreur lors du chargement de l'étudiant";
         }
@@ -108,12 +115,17 @@ export class FormComponent implements OnInit, OnDestroy {
     const ctrl = this.form.get(field);
     if (!ctrl?.errors) return '';
 
-    if (ctrl.errors['required']) return `${field} est obligatoire`;
+    if (ctrl.errors['required']) return `${this.fieldLabel(field)} est obligatoire`;
     if (ctrl.errors['minlength']) return `Trop court`;
-    if (ctrl.errors['email']) return `Email invalide`;
+    if (ctrl.errors['email']) return `Adresse email invalide`;
+    if (ctrl.errors['minlength'] && field === 'password') return `Au moins 6 caracteres`;
     if (ctrl.errors['pattern']) return `Format invalide`;
 
     return 'Erreur';
+  }
+
+  encadrantLabel(enseignant: any): string {
+    return [enseignant?.nom, enseignant?.prenom].filter(Boolean).join(' ') || `Enseignant #${enseignant?.id}`;
   }
 
   onSubmit(): void {
@@ -121,7 +133,13 @@ export class FormComponent implements OnInit, OnDestroy {
 
     if (this.form.invalid) return;
 
-    const payload: Etudiant = this.form.value;
+    const payload: Etudiant = {
+      ...this.form.value,
+      encadrantId: Number(this.form.value.encadrantId)
+    };
+    if (!payload.password) {
+      delete payload.password;
+    }
 
     if (this.isEditMode && this.etudiantId) {
       this.service.update(this.etudiantId, payload)
@@ -154,5 +172,25 @@ export class FormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private fieldLabel(field: string): string {
+    const labels: Record<string, string> = {
+      nom: 'Nom',
+      prenom: 'Prenom',
+      email: 'Email',
+      matricule: 'Matricule',
+      filiere: 'Filiere',
+      niveau: 'Niveau',
+      encadrantId: 'Encadrant',
+      password: 'Mot de passe'
+    };
+    return labels[field] || field;
+  }
+
+  private setPasswordValidators(required: boolean): void {
+    const ctrl = this.form.get('password');
+    ctrl?.setValidators(required ? [Validators.required, Validators.minLength(6)] : [Validators.minLength(6)]);
+    ctrl?.updateValueAndValidity();
   }
 }

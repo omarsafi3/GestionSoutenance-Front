@@ -6,15 +6,23 @@
 <section class="panel">
   <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
     <label>Nom
-      <input formControlName="nom" placeholder="Nom">
+      <input formControlName="nom" placeholder="Nom" [class.is-invalid]="isFieldInvalid('nom')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('nom')">{{ getFieldError('nom') }}</span>
     </label>
 
     <label>Prenom
-      <input formControlName="prenom" placeholder="Prenom">
+      <input formControlName="prenom" placeholder="Prenom" [class.is-invalid]="isFieldInvalid('prenom')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('prenom')">{{ getFieldError('prenom') }}</span>
     </label>
 
     <label>Email
-      <input formControlName="email" placeholder="email@exemple.com">
+      <input type="email" formControlName="email" placeholder="nom@example.com" [class.is-invalid]="isFieldInvalid('email')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('email')">{{ getFieldError('email') }}</span>
+    </label>
+
+    <label>Mot de passe {{ id ? '(laisser vide pour ne pas changer)' : '' }}
+      <input type="password" formControlName="password" autocomplete="new-password" [class.is-invalid]="isFieldInvalid('password')">
+      <span class="invalid-feedback" *ngIf="isFieldInvalid('password')">{{ getFieldError('password') }}</span>
     </label>
 
     <label>Grade

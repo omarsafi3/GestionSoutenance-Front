@@ -23,25 +23,35 @@
             <!-- NOM -->
             <div class="mb-3">
               <label class="form-label">Nom *</label>
-              <input class="form-control" formControlName="nom">
+              <input class="form-control" formControlName="nom" [class.is-invalid]="isFieldInvalid('nom')">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('nom')">{{ getFieldError('nom') }}</div>
             </div>
 
             <!-- PRENOM -->
             <div class="mb-3">
               <label class="form-label">Prénom *</label>
-              <input class="form-control" formControlName="prenom">
+              <input class="form-control" formControlName="prenom" [class.is-invalid]="isFieldInvalid('prenom')">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('prenom')">{{ getFieldError('prenom') }}</div>
             </div>
 
             <!-- EMAIL -->
             <div class="mb-3">
               <label class="form-label">Email *</label>
-              <input class="form-control" formControlName="email">
+              <input class="form-control" type="email" formControlName="email" placeholder="nom@example.com" [class.is-invalid]="isFieldInvalid('email')">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">{{ getFieldError('email') }}</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Mot de passe {{ isEditMode ? '(laisser vide pour ne pas changer)' : '*' }}</label>
+              <input class="form-control" type="password" formControlName="password" autocomplete="new-password" [class.is-invalid]="isFieldInvalid('password')">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">{{ getFieldError('password') }}</div>
             </div>
 
             <!-- MATRICULE -->
             <div class="mb-3">
               <label class="form-label">Matricule *</label>
-              <input class="form-control" formControlName="matricule">
+              <input class="form-control" formControlName="matricule" [class.is-invalid]="isFieldInvalid('matricule')">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('matricule')">{{ getFieldError('matricule') }}</div>
             </div>
 
             <!-- FILIERE -->
@@ -51,6 +61,7 @@
                 <option value="">-- choisir --</option>
                 <option *ngFor="let f of filieres" [value]="f">{{ f }}</option>
               </select>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('filiere')">{{ getFieldError('filiere') }}</div>
             </div>
 
             <!-- NIVEAU -->
@@ -60,6 +71,7 @@
                 <option value="">-- choisir --</option>
                 <option *ngFor="let n of niveaux" [value]="n">{{ n }}</option>
               </select>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('niveau')">{{ getFieldError('niveau') }}</div>
             </div>
 
             <!-- ENCADRANT -->
@@ -67,12 +79,13 @@
               <label class="form-label">Encadrant *</label>
 
               <select class="form-select" formControlName="encadrantId">
-                <option value="">-- choisir un encadrant --</option>
+                <option [ngValue]="null">-- choisir un encadrant --</option>
 
-                <option *ngFor="let e of enseignants" [value]="e.id">
-                  {{ e.id }}
+                <option *ngFor="let e of enseignants" [ngValue]="e.id">
+                  {{ encadrantLabel(e) }}
                 </option>
               </select>
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('encadrantId')">{{ getFieldError('encadrantId') }}</div>
             </div>
 
             <div class="d-flex gap-2 justify-content-end">
@@ -80,7 +93,7 @@
                 Annuler
               </button>
 
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-primary" [disabled]="form.invalid || loading">
                 {{ isEditMode ? 'Modifier' : 'Créer' }}
               </button>
             </div>

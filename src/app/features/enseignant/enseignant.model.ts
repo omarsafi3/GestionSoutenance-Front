@@ -5,4 +5,5 @@ export interface Enseignant {
   email: string;
   grade?: string;
   specialite?: string;
+  password?: string;
 }

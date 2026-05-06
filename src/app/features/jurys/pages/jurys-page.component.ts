@@ -13,7 +13,7 @@ import { SoutenancesService } from '../../../core/services/soutenances.service';
   template: `
     <section class="page-header">
       <h1>Jurys</h1>
-      <p>Affectation des membres du jury pour chaque soutenance.</p>
+      <p>Correction du jury uniquement pour les soutenances non terminees.</p>
     </section>
 
     <section class="panel">
@@ -22,7 +22,7 @@ import { SoutenancesService } from '../../../core/services/soutenances.service';
         <label>Soutenance
           <select name="soutenanceId" [(ngModel)]="form.soutenanceId" required>
             <option [ngValue]="0" disabled>Selectionner</option>
-            <option *ngFor="let s of soutenances" [ngValue]="s.id">{{ s.titre }} - {{ s.etudiantNom }} {{ s.etudiantPrenom }}</option>
+            <option *ngFor="let s of editableSoutenances" [ngValue]="s.id">{{ s.titre }} - {{ s.etudiantNom }} {{ s.etudiantPrenom }}</option>
           </select>
         </label>
 
@@ -48,7 +48,7 @@ import { SoutenancesService } from '../../../core/services/soutenances.service';
         </label>
 
         <div class="actions-row">
-          <button type="submit" class="btn-primary">Affecter</button>
+          <button type="submit" class="btn-primary" [disabled]="!canSubmitJury">Affecter</button>
           <button type="button" class="btn-light" (click)="resetForm()">Reinitialiser</button>
         </div>
       </form>
@@ -61,7 +61,7 @@ import { SoutenancesService } from '../../../core/services/soutenances.service';
           </select>
         </label>
         <button class="btn-light" (click)="loadJury()">Charger</button>
-        <button class="btn-danger" (click)="removeJury()">Supprimer jury</button>
+        <button class="btn-danger" [disabled]="isLookupFinished" (click)="removeJury()">Supprimer jury</button>
       </div>
 
       <div *ngIf="jury" class="result-card">
@@ -107,9 +107,34 @@ export class JurysPageComponent implements OnInit {
     });
   }
 
+  get editableSoutenances(): Soutenance[] {
+    return this.soutenances.filter(s => s.statut !== 'TERMINEE');
+  }
+
+  get canSubmitJury(): boolean {
+    return !!this.form.soutenanceId
+      && !this.isFinished(this.form.soutenanceId)
+      && !!this.form.presidentId
+      && !!this.form.rapporteurId
+      && !!this.form.examinateurId
+      && new Set([this.form.presidentId, this.form.rapporteurId, this.form.examinateurId]).size === 3;
+  }
+
+  get isLookupFinished(): boolean {
+    return this.isFinished(this.lookupSoutenanceId);
+  }
+
   save(): void {
     if (!this.form.soutenanceId || !this.form.presidentId || !this.form.rapporteurId || !this.form.examinateurId) {
       this.errorMessage = 'Tous les champs sont obligatoires.';
+      return;
+    }
+    if (this.isFinished(this.form.soutenanceId)) {
+      this.errorMessage = 'Le jury d une soutenance terminee ne peut pas etre modifie.';
+      return;
+    }
+    if (new Set([this.form.presidentId, this.form.rapporteurId, this.form.examinateurId]).size !== 3) {
+      this.errorMessage = 'Les membres du jury doivent etre differents.';
       return;
     }
 
@@ -126,6 +151,10 @@ export class JurysPageComponent implements OnInit {
 
   loadJury(): void {
     if (!this.lookupSoutenanceId) {
+      return;
+    }
+    if (this.isFinished(this.lookupSoutenanceId)) {
+      this.errorMessage = 'Le jury d une soutenance terminee ne peut pas etre supprime.';
       return;
     }
     this.clearMessages();
@@ -170,5 +199,9 @@ export class JurysPageComponent implements OnInit {
   private setError(err: unknown): void {
     const message = (err as { error?: { message?: string } })?.error?.message;
     this.errorMessage = message || 'Une erreur est survenue.';
+  }
+
+  private isFinished(soutenanceId: number): boolean {
+    return this.soutenances.some(s => s.id === soutenanceId && s.statut === 'TERMINEE');
   }
 }

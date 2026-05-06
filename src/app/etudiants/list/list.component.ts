@@ -28,6 +28,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   niveauxUniques: string[] = [];
   filiereUniques: string[] = [];
+  enseignants: any[] = [];
 
   selectedIdToDelete: number | null = null;
   showDeleteConfirm = false;
@@ -54,7 +55,14 @@ export class ListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadEtudiants();
-
+    this.service.getEnseignants()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: data => (this.enseignants = data),
+        error: () => {
+          this.enseignants = [];
+        }
+      });
     this.service.getLoading()
       .pipe(takeUntil(this.destroy$))
       .subscribe(loading => this.loading = loading);
@@ -194,6 +202,21 @@ export class ListComponent implements OnInit, OnDestroy {
 
   get hasFilters(): boolean {
     return !!(this.searchTerm || this.filterNiveau || this.filterFiliere);
+  }
+
+  encadrantLabel(id?: number): string {
+    const enseignantId = id;
+    if (!enseignantId) return '-';
+    return this.enseignantLabel(enseignantId);
+  }
+
+  encadrantLabelForStudent(etudiant: Etudiant): string {
+    return etudiant.encadrantId ? this.enseignantLabel(etudiant.encadrantId) : '-';
+  }
+
+  private enseignantLabel(id: number): string {
+    const enseignant = this.enseignants.find(item => item.id === id);
+    return enseignant ? [enseignant.nom, enseignant.prenom].filter(Boolean).join(' ') : `#${id}`;
   }
 
   ngOnDestroy(): void {

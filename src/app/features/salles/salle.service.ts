@@ -43,16 +43,24 @@ export class SalleService {
 
   create(data: Salle): Observable<Salle> {
     this.loading$.next(true);
+    this.error$.next(null);
     return this.http.post<Salle>(this.apiUrl, data).pipe(
       tap(newItem => {
         this.salles$.next([...this.salles$.value, newItem]);
         this.loading$.next(false);
+      }),
+      catchError(err => {
+        const message = this.extractErrorMessage(err, 'Enregistrement de la salle impossible');
+        this.error$.next(message);
+        this.loading$.next(false);
+        return throwError(() => new Error(message));
       })
     );
   }
 
   update(id: number, data: Salle): Observable<Salle> {
     this.loading$.next(true);
+    this.error$.next(null);
     return this.http.put<Salle>(`${this.apiUrl}/${id}`, data).pipe(
       tap(updated => {
         const list = this.salles$.value.map(s =>
@@ -60,19 +68,40 @@ export class SalleService {
         );
         this.salles$.next(list);
         this.loading$.next(false);
+      }),
+      catchError(err => {
+        const message = this.extractErrorMessage(err, 'Modification de la salle impossible');
+        this.error$.next(message);
+        this.loading$.next(false);
+        return throwError(() => new Error(message));
       })
     );
   }
 
   delete(id: number): Observable<void> {
     this.loading$.next(true);
+    this.error$.next(null);
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       tap(() => {
         this.salles$.next(
           this.salles$.value.filter(s => s.id !== id)
         );
         this.loading$.next(false);
+      }),
+      catchError(err => {
+        const message = this.extractErrorMessage(err, 'Suppression de la salle impossible');
+        this.error$.next(message);
+        this.loading$.next(false);
+        return throwError(() => new Error(message));
       })
     );
+  }
+
+  private extractErrorMessage(err: any, fallback: string): string {
+    const backendMessage =
+      typeof err?.error === 'string'
+        ? err.error
+        : err?.error?.message || err?.message;
+    return backendMessage && backendMessage.trim() ? backendMessage : fallback;
   }
 }

@@ -26,6 +26,7 @@ export interface Encadrant {
   email: string;
   grade: string;
   specialite: string;
+  password?: string;
 }
 
 export interface Jury {

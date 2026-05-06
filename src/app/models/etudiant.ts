@@ -7,4 +7,5 @@ export interface Etudiant {
   filiere: string;
   niveau: string;
   encadrantId?: number;
+  password?: string;
 }

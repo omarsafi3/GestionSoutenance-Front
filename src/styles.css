@@ -172,8 +172,13 @@
   }
 
   .form-text,
-  .text-muted {
+  .text-muted,
+  .invalid-feedback {
     @apply text-sm text-slate-500;
+  }
+
+  .invalid-feedback {
+    @apply mt-1 block font-semibold text-coral;
   }
 
   .actions-row,
@@ -190,7 +195,10 @@
   .btn-info,
   .btn-outline-secondary,
   .btn-outline-info {
-    @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-bold leading-none no-underline transition duration-200 disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex min-h-10 max-w-full items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-bold leading-tight no-underline transition duration-200 disabled:pointer-events-none disabled:opacity-50;
+    overflow-wrap: anywhere;
+    text-align: center;
+    white-space: normal;
   }
 
   .btn:hover,

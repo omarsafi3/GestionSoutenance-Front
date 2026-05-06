@@ -28,22 +28,17 @@ import { AuthService } from '../../../core/auth/auth.service';
         </label>
 
         <label *ngIf="isAdmin">Evaluateur
-          <select name="evaluateurId" [(ngModel)]="form.evaluateurId" required>
+          <select name="evaluateurId" [(ngModel)]="form.evaluateurId" (ngModelChange)="onEvaluatorChange()" required>
             <option [ngValue]="0" disabled>Selectionner</option>
-            <option *ngFor="let e of encadrants" [ngValue]="e.id">{{ e.nom }} {{ e.prenom }}</option>
+            <option *ngFor="let e of eligibleEvaluateurs" [ngValue]="e.id">{{ e.nom }} {{ e.prenom }}</option>
           </select>
         </label>
         <label *ngIf="!isAdmin">Evaluateur
           <input [value]="'Vous-meme'" disabled />
         </label>
 
-        <label *ngIf="isAdmin">Role jury
-          <select name="roleJury" [(ngModel)]="form.roleJury" required>
-            <option *ngFor="let role of roles" [ngValue]="role">{{ role }}</option>
-          </select>
-        </label>
-        <label *ngIf="!isAdmin">Role jury
-          <input [value]="form.roleJury" disabled />
+        <label>Role jury
+          <input [value]="roleDisplay" disabled />
         </label>
 
         <label>Note expose<input type="number" name="noteExpose" min="0" max="20" step="0.1" [(ngModel)]="form.noteExpose" required /></label>
@@ -111,8 +106,6 @@ export class NotesPageComponent implements OnInit {
   selectedSoutenanceId = 0;
   editingId: number | null = null;
 
-  roles: RoleJury[] = ['PRESIDENT', 'RAPPORTEUR', 'EXAMINATEUR'];
-
   successMessage = '';
   errorMessage = '';
 
@@ -132,6 +125,25 @@ export class NotesPageComponent implements OnInit {
 
   get currentEnseignantId(): number | null {
     return this.authService.getCurrentEnseignantId();
+  }
+
+  get selectedSoutenanceValue(): Soutenance | undefined {
+    return this.soutenances.find(s => s.id === this.form.soutenanceId);
+  }
+
+  get eligibleEvaluateurs(): Encadrant[] {
+    const soutenance = this.selectedSoutenanceValue;
+    if (!soutenance) {
+      return this.encadrants;
+    }
+    const ids = new Set([soutenance.presidentId, soutenance.rapporteurId, soutenance.examinateurId].filter(Boolean));
+    return this.encadrants.filter(e => e.id != null && ids.has(e.id));
+  }
+
+  get roleDisplay(): string {
+    if (!this.form.soutenanceId) return 'Selectionner une soutenance';
+    if (!this.form.evaluateurId) return 'Selectionner un evaluateur';
+    return this.roleForEvaluator(this.selectedSoutenanceValue, this.form.evaluateurId) || 'Evaluateur hors jury';
   }
 
   ngOnInit(): void {
@@ -157,10 +169,13 @@ export class NotesPageComponent implements OnInit {
       this.errorMessage = 'Soutenance et evaluateur sont obligatoires.';
       return;
     }
-    if (!this.isAdmin) {
-      this.form.evaluateurId = this.currentEnseignantId ?? 0;
-      this.form.roleJury = this.roleForCurrentTeacher(this.selectedSoutenance()) ?? this.form.roleJury;
+
+    const role = this.roleForEvaluator(this.selectedSoutenanceValue, this.form.evaluateurId);
+    if (!role) {
+      this.errorMessage = "L'evaluateur selectionne n'est pas membre du jury de cette soutenance.";
+      return;
     }
+    this.form.roleJury = role;
 
     this.clearMessages();
     const request = this.editingId
@@ -224,20 +239,22 @@ export class NotesPageComponent implements OnInit {
   onSoutenanceChange(): void {
     if (!this.isAdmin) {
       this.form.evaluateurId = this.currentEnseignantId ?? 0;
-      this.form.roleJury = this.roleForCurrentTeacher(this.selectedSoutenance()) ?? 'PRESIDENT';
     }
+    if (this.isAdmin && !this.eligibleEvaluateurs.some(e => e.id === this.form.evaluateurId)) {
+      this.form.evaluateurId = 0;
+    }
+    this.refreshRoleFromSelection();
+  }
+
+  onEvaluatorChange(): void {
+    this.refreshRoleFromSelection();
   }
 
   canEditNote(note: Note): boolean {
     return this.isAdmin || note.evaluateurId === this.currentEnseignantId;
   }
 
-  private selectedSoutenance(): Soutenance | undefined {
-    return this.soutenances.find(s => s.id === this.form.soutenanceId);
-  }
-
-  private roleForCurrentTeacher(soutenance?: Soutenance): RoleJury | null {
-    const enseignantId = this.currentEnseignantId;
+  private roleForEvaluator(soutenance: Soutenance | undefined, enseignantId: number | null | undefined): RoleJury | null {
     if (!soutenance || !enseignantId) {
       return null;
     }
@@ -245,6 +262,10 @@ export class NotesPageComponent implements OnInit {
     if (soutenance.rapporteurId === enseignantId) return 'RAPPORTEUR';
     if (soutenance.examinateurId === enseignantId) return 'EXAMINATEUR';
     return null;
+  }
+
+  private refreshRoleFromSelection(): void {
+    this.form.roleJury = this.roleForEvaluator(this.selectedSoutenanceValue, this.form.evaluateurId) ?? this.form.roleJury;
   }
 
   private clearMessages(): void {

@@ -44,7 +44,10 @@ export class EncadrantsFormComponent implements OnInit, OnDestroy {
     if (id) {
       this.isEditMode = true;
       this.encadrantId = parseInt(id, 10);
+      this.setPasswordValidators(false);
       this.loadEncadrant(this.encadrantId);
+    } else {
+      this.setPasswordValidators(true);
     }
 
     this.service.getLoading()
@@ -66,7 +69,8 @@ export class EncadrantsFormComponent implements OnInit, OnDestroy {
       prenom: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       grade: ['', Validators.required],
-      specialite: ['', Validators.required]
+      specialite: ['', Validators.required],
+      password: ['', [Validators.minLength(6)]]
     });
   }
 
@@ -108,7 +112,8 @@ export class EncadrantsFormComponent implements OnInit, OnDestroy {
       prenom: 'Prénom',
       email: 'Email',
       grade: 'Grade',
-      specialite: 'Spécialité'
+      specialite: 'Spécialité',
+      password: 'Mot de passe'
     };
     return labels[field] || field;
   }
@@ -123,7 +128,10 @@ export class EncadrantsFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const encadrant: Encadrant = this.form.value;
+    const encadrant: Encadrant = { ...this.form.value };
+    if (!encadrant.password) {
+      delete encadrant.password;
+    }
 
     if (this.isEditMode && this.encadrantId) {
       this.service.update(this.encadrantId, encadrant)
@@ -162,5 +170,11 @@ export class EncadrantsFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private setPasswordValidators(required: boolean): void {
+    const ctrl = this.form.get('password');
+    ctrl?.setValidators(required ? [Validators.required, Validators.minLength(6)] : [Validators.minLength(6)]);
+    ctrl?.updateValueAndValidity();
   }
 }
